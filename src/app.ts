@@ -1,8 +1,9 @@
 import Phaser, { Scale } from "phaser";
 import BaseScene from "./scene/base/base";
+import Level1 from "./scene/level1";
 
 let scenes = [
-    new BaseScene()
+    new Level1()
 ]
 
 const config = {
@@ -15,4 +16,7 @@ const config = {
     }
 }
 
-const app = new Phaser.Game(config);
+export const app = new Phaser.Game(config);
+
+// @ts-ignore
+globalThis.__PHASER_GAME__ = app;

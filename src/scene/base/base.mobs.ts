@@ -1,19 +1,17 @@
 import { Scene } from "phaser";
 import Player from "../../components/player/player";
+import BaseScene from "./base";
 
-export default function (scene : Scene) {
+export default function (scene : BaseScene) {
     return [
         new Player({
             name : "ship",
-            scene : scene,
             texture : "spaceship",
-            speed : 1,
-            animations : [{
-                key: 'idle',
-                frames: 'spaceship',
-                frameRate: 60,
-                repeat: -1
-            }]
+            scene : scene,
+            speed : 30,
+            x: 390,
+            y: 517,
+            runTime : false
         })
     ]
 }

@@ -19,7 +19,10 @@ class BuildMainifestPlugin {
         const { Compilation } = webpack;
         const { RawSource } = webpack.sources;
 
-        compiler.hooks.environment.tap('BuildManifestPlugin', async (compilation) => {
+        compiler.hooks.environment.tap({
+            name : "BuildManifestPlugin",
+            stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL
+        }, async (compilation) => {
             try {
                 console.log(`\n\n|||BUILDING MANIFEST|||\n`);
                 this.output["base"] = "./assets/";

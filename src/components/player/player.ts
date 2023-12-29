@@ -1,22 +1,53 @@
 import Mob, { IMob } from "../mob";
+import Projectile from "../projectile/projectile";
 
 export default class Player extends Mob {
     sprite : Phaser.GameObjects.Sprite;
+    movementSpeed = 0;
 
     constructor(options : IMob) {
         super(options);
     }
 
-    movement() {
-        this.instance.scene.input.keyboard.on("keydown-A",()=>{
-            this.sprite.setX(this.sprite.x * -this.instance.speed);
-        },this.instance.scene);
-        this.instance.scene.input.keyboard.on("keydown-D",()=>{
-            this.sprite.setX(this.sprite.x * -this.instance.speed);
-        },this.instance.scene);
+    create(): void {
+        super.create();
+        this.movement();
+        this.fire();
     }
 
     update(time: number, delta: number): void {
-        this.movement();
+        super.update(time,delta);
+        this.container.x += (this.movementSpeed / delta);
+    }
+
+    movement() {
+        this.scene.input.keyboard.on("keydown-A",()=>{
+            this.movementSpeed = -this.instance.speed;
+        },this.scene);
+        this.scene.input.keyboard.on("keydown-D",()=>{
+            this.movementSpeed = this.instance.speed;
+        },this.scene);
+
+        this.scene.input.keyboard.on("keyup-A",()=>{
+            this.movementSpeed = 0;
+        },this.scene);
+        this.scene.input.keyboard.on("keyup-D",()=>{
+            this.movementSpeed = 0;
+        },this.scene);
+    }
+
+    fire() {
+        this.scene.input.keyboard.on("keydown-SPACE",()=>{
+            new Projectile({
+                name : "blast",
+                texture : "blast",
+                scene : this.scene,
+                speed : 100,
+                x: this.container.x,
+                y: this.container.y - 20,
+                runTime : true
+
+            })
+        },this.scene);
     }
 }   

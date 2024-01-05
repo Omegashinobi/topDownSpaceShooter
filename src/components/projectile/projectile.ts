@@ -10,14 +10,19 @@ export default class Projectile extends Mob {
     }
 
     create(): void {
+        this.collisionList = [
+            'enemy',
+            'player',
+        ];
+
         super.create();
         this.sprite.play({key: "Emit"});
-        this.sprite.chain([{key: "Idle", repeat: -1}])
+        this.sprite.chain([{key: "Idle", repeat: -1}]);
     }
 
     update(time: number, delta: number): void {
         super.update(time,delta);
-
         this.container.y += -(this.instance.speed / delta);
     }
 }
+

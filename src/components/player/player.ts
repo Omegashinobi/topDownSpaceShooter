@@ -1,10 +1,8 @@
 import Mob, { IMob } from "../mob";
+import PlayerProjectile from "../projectile/playerProjectile";
 import Projectile from "../projectile/projectile";
 
 export default class Player extends Mob {
-    sprite : Phaser.GameObjects.Sprite;
-    movementSpeed = 0;
-
     constructor(options : IMob) {
         super(options);
     }
@@ -38,7 +36,7 @@ export default class Player extends Mob {
 
     fire() {
         this.scene.input.keyboard.on("keydown-SPACE",()=>{
-            new Projectile({
+            new PlayerProjectile({
                 name : "blast",
                 texture : "blast",
                 scene : this.scene,

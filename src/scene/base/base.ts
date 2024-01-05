@@ -10,6 +10,8 @@ export default class BaseScene extends Phaser.Scene {
     debug : boolean = true;
     debugSelected : any;
 
+    timer : number = 0;
+
     constructor(){
         super();
     }
@@ -37,8 +39,6 @@ export default class BaseScene extends Phaser.Scene {
             });
         });
 
-        this.scale.displaySize.setAspectRatio( window.innerWidth / window.innerHeight );
-        this.scale.refresh();
     }
 
     update(time: number, delta: number): void {
@@ -47,5 +47,35 @@ export default class BaseScene extends Phaser.Scene {
                 e.update(time,delta);
             });
         });
+
+        this.timer += delta;
+    }
+
+    findGameObjectWithTag(tag : string) : Mob {
+        return this.mobs.find((e)=>{return e.instance.tag === tag})
+    }
+
+    findGameObjectsWithTag(tag : string) : Mob[] {
+        let list : Mob[] = [];
+
+        this.mobs.forEach((e : Mob)=>{
+            if(e.instance.tag === tag) {
+                list.push(e);
+            }
+        })
+
+        return list;
+    }
+
+    destroyMob(mob : Mob) {
+        let index : number;
+        
+        this.mobs.forEach((e,i)=>{
+            if((e.id === mob.id)) {
+                index = i;
+            };
+        })
+        
+        this.mobs.splice(index,1);
     }
 }

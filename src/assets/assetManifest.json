@@ -1,1 +1,1 @@
-{"base":"./assets/","sprites":{"atlas":["blast.json","spaceship.json"],"images":["blast.png","default.png","spaceship.png"]}}
+{"base":"./assets/","sprites":{"atlas":["alien.json","blast.json","powerUp.json","spaceship.json"],"images":["alien.png","blast.png","default.png","powerUp.png","spaceship.png"]}}

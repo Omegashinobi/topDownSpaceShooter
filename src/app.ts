@@ -18,9 +18,8 @@ const config = {
     width: SIZE_WIDTH_SCREEN,
     height: SIZE_HEIGHT_SCREEN, 
     scene: scenes,
-    scale : {
-        mode : Phaser.Scale.FIT
-    },
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
     physics: {
         default: 'arcade',
         arcade: {

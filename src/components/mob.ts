@@ -11,6 +11,7 @@ export interface IMob {
     runTime: boolean,
     health?: number,
     killOnOutOfBounds?: boolean
+    hitArea : any,
 }
 
 export interface IDebugOptions {
@@ -25,6 +26,7 @@ export interface IMovementTween {
     delay: number,
     ease: string,
     repeat: number,
+    event? : string
 }
 
 export default class Mob {
@@ -46,9 +48,14 @@ export default class Mob {
 
     collisionList: string[];
 
+    hitArea : any;
+
+    score : number;
+
     constructor(options: IMob) {
         this.scene = options.scene;
         this.instance = options;
+        this.hitArea = options.hitArea;
 
 
         if (this.instance.runTime) {
@@ -75,7 +82,8 @@ export default class Mob {
             this.sprite.width,
             this.sprite.height
         );
-        this.container.setInteractive();
+
+        this.container.setInteractive(this.hitArea, Phaser.Geom.Rectangle.Contains);
 
         if (this.collisionList) {
             this.collisionList.forEach((e: string) => {
@@ -116,6 +124,12 @@ export default class Mob {
         });
 
         this.container.add(this.debugOptions.positionText);
+
+        const graphics : Phaser.GameObjects.Graphics = this.scene.add.graphics();
+        graphics.lineStyle(2, 0x00ffff, 1);
+        graphics.strokeRect(this.hitArea.x,this.hitArea.y,this.hitArea.width,this.hitArea.height);
+
+        this.container.add(graphics);
     }
 
     debugUpdate() {
@@ -194,6 +208,11 @@ export default class Mob {
     destroy() {
         this.container.destroy();
         this.scene.destroyMob(this);
+
+        if(this.score && this.instance.health === 0) {
+            this.scene.score += this.score;
+            this.scene.combo++;
+        }
     }
 
     setRand(max : number,min : number) {

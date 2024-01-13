@@ -10,6 +10,7 @@ export default class PlayerProjectile extends Projectile {
 
         this.onCollision = (other : Mob)=> {
             if(other.instance.tag === "enemy") {
+                this.scene.comboTimer = 3000;
                 other.instance.health -=1;
                 this.destroy();
             }

@@ -1,6 +1,10 @@
 import Mob, { IMob } from "../mob";
 
 export default class Projectile extends Mob {
+
+    projectileTimeOut : number = 10000;
+    projectileTime : number = 0;
+
     constructor(options : IMob) {
         super(options);
      }
@@ -23,6 +27,12 @@ export default class Projectile extends Mob {
     update(time: number, delta: number): void {
         super.update(time,delta);
         this.container.y += -(this.instance.speed / delta);
+
+        this.projectileTime += delta;
+
+        if(this.projectileTime > this.projectileTimeOut) {
+            this.destroy();
+        }
     }
 }
 

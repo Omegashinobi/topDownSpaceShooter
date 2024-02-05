@@ -60,6 +60,7 @@ export default class Mob {
 
         if (this.instance.runTime) {
             this.container = this.scene.add.container(this.instance.x, this.instance.y);
+            this.scene.physics.add.existing(this.container);
             this.create();
 
             this.scene.mobs.push(this);
@@ -167,7 +168,7 @@ export default class Mob {
     getMob(id: string): Mob {
         let data: Mob
         this.scene.mobs.forEach((e: Mob) => {
-            if (e.instance.name === "") {
+            if (e.instance.name === id) {
                 data = e;
             }
         });

@@ -3,6 +3,7 @@ import Player from "../../components/player/player";
 import BaseScene from "./base";
 import Enemy from "../../components/enemy/enemy";
 import Mob, { IMovementTween } from "../../components/mob";
+import Turret from "../../components/enemy/turret";
 
 export default function (scene: BaseScene, loaded : Promise<void>) {
 
@@ -129,6 +130,35 @@ export default function (scene: BaseScene, loaded : Promise<void>) {
     }
     const enemySet3Function = enemySet3(0);
 
+    function* turretSet1(index: number): any {
+        for (let i = 0; i < 5; i++) {
+            yield [
+                {
+                    at: 0,
+                    duration: 20000,
+                    y: 1000,
+                    delay: 2,
+                    ease: "Sine.easeInOut",
+                    repeat: 0,
+                    event : "ENABLE_FIRE"
+                },
+                {
+                    at: 20000,
+                    duration: 20000,
+                    y: 1000,
+                    x : -1000,
+                    delay: 0,
+                    ease: "Sine.easeInOut",
+                    repeat: 0,
+                    event : "DESTROY"
+                },
+            ]
+            index++;
+        }
+    }
+    const turretSet1Function = turretSet1(0);
+
+
     mobList = [
         new Player({
             name: "ship",
@@ -189,6 +219,30 @@ export default function (scene: BaseScene, loaded : Promise<void>) {
             health: 3,
             hitArea: new Phaser.Geom.Rectangle(-32, -32, 64, 64)
         }, enemySet2Function.next().value, 12000),
+        new Turret({
+            name: "enemy",
+            texture: "spaceship",
+            scene: scene,
+            speed: 30,
+            x: 627,
+            y: -170,
+            runTime: false,
+            tag: "enemy",
+            health: 3,
+            hitArea: new Phaser.Geom.Rectangle(-32, -32, 64, 64)
+        }, turretSet1Function.next().value, 10000),
+        new Turret({
+            name: "enemy",
+            texture: "spaceship",
+            scene: scene,
+            speed: 30,
+            x: 90,
+            y: -170,
+            runTime: false,
+            tag: "enemy",
+            health: 3,
+            hitArea: new Phaser.Geom.Rectangle(-32, -32, 64, 64)
+        }, turretSet1Function.next().value, 12000),
         new Enemy({
             name: "enemy",
             texture: "alien",

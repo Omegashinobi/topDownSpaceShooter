@@ -6,8 +6,8 @@ export default class Enemy extends Mob {
     public movementPattern: any[] = [];
     private onDeath: any;
 
-    private fireRate: number;
-    private maxFireRate: number = this.setRand(2000, 1000);
+    protected fireRate: number;
+    protected maxFireRate: number = this.setRand(2000, 1000);
 
     private movementTimeLine: any;
     private movementTimeLinePlaying: boolean = false;
@@ -17,6 +17,8 @@ export default class Enemy extends Mob {
     public canFire : boolean = false;
 
     public trackerActive: number;
+
+    public player : Mob;
 
     collisionList: string[];
 
@@ -59,7 +61,9 @@ export default class Enemy extends Mob {
                 },
                 event : e.event != null ? e.event : "IDLE"
             }
-        }))
+        }));
+
+        this.player = this.getMob("ship_0");
     }
 
     update(time: number, delta: number): void {
@@ -89,7 +93,7 @@ export default class Enemy extends Mob {
         }
     }
 
-    fire() {
+    fire(towards : boolean = false) {
         if (this.fireRate <= 0) {
             new enemyProjectile({
                 name: "blast",
@@ -100,7 +104,7 @@ export default class Enemy extends Mob {
                 y: this.container.y - 20,
                 runTime: true,
                 hitArea: new Phaser.Geom.Rectangle(-16, -16, 32, 32)
-            })
+            },towards,{x:this.container.x,y:this.container.y})
             this.maxFireRate = this.setRand(2000, 1000);
             this.fireRate = this.maxFireRate;
         }

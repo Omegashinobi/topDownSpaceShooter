@@ -1,11 +1,12 @@
 import { app } from "../../app";
-import Mob, { IMob } from "../mob";
+import { EMobType, IMob } from "../mob/data/mob";
+import Mob from "../mob/mob";
 import PlayerProjectile from "../projectile/playerProjectile";
 import Projectile from "../projectile/projectile";
 
 export default class Player extends Mob {
 
-    maxFireRate : number = 200;
+    maxFireRate : number = 300;
     currFireRate : number = 0;
 
     input : {
@@ -14,12 +15,12 @@ export default class Player extends Mob {
         Space : any;
     }
 
-    constructor(options : IMob) {
-        super(options);
+    constructor() {
+        super();
     }
 
-    create(): void {
-        super.create();
+    create(options: IMob): void {
+        super.create(options);
 
         this.input = {
             A : this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
@@ -53,18 +54,19 @@ export default class Player extends Mob {
         if(this.input.Space.isDown) {
             if(this.currFireRate <= 0) {
                 this.currFireRate = this.maxFireRate;
-                new PlayerProjectile({
+                const proj = new PlayerProjectile()
+                this.scene.addToMobList(proj,{
+                    type : EMobType.projectile,   
                     name : "blast",
                     texture : "blast",
                     scene : this.scene,
-                    speed : 100,
+                    speed : 300,
                     x: this.container.x,
                     y: this.container.y - 20,
                     runTime : true,
-                    hitArea : new Phaser.Geom.Rectangle(-16,-16,32,32)
+                    hitArea : new Phaser.Geom.Rectangle(0,0,32,32)
                 })
             }
-            
         }
     }
 }   

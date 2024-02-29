@@ -1,4 +1,5 @@
-import Mob, { IMob, IMovementTween } from "../mob";
+import { EMobType, IEnemyOptions, IMob } from "../mob/data/mob";
+import Mob from "../mob/mob";
 import enemyProjectile from "../projectile/enemyProjectile";
 
 export default class Enemy extends Mob {
@@ -9,30 +10,28 @@ export default class Enemy extends Mob {
     protected fireRate: number;
     protected maxFireRate: number = this.setRand(2000, 1000);
 
-    private movementTimeLine: any;
-    private movementTimeLinePlaying: boolean = false;
+    public actions : any;
 
-    private customTimeLine: any;
+    private actionsPlaying: boolean = false;
 
     public canFire : boolean = false;
 
     public trackerActive: number;
 
+
     public player : Mob;
+
 
     collisionList: string[];
 
-    constructor(options: IMob, movementPattern: any, trackerActive: number) {
-        super(options);
-        this.movementPattern = movementPattern;
-
-        this.score = 100;
-        this.trackerActive = trackerActive;
+    constructor() {
+        super();
     }
 
-    create(): void {
+    public create(options: IMob & IEnemyOptions) : void {
+        this.score = 100;
         this.collisionList = [
-            'enemy'
+            'enemy',
         ];
 
         this.onDeath = () => {
@@ -40,33 +39,19 @@ export default class Enemy extends Mob {
         }
 
         this.fireRate = this.maxFireRate;
+        super.create(options);
+        this.player = this.scene.findMobByName("ship_0");
 
-        super.create();
+        if(options.action) {
+            this.setUpActions(options.action(this));
+        }
 
-        this.movementTimeLine = this.scene.add.timeline({});
-
-        this.enemyEvents();
-
-        this.movementTimeLine.add(this.movementPattern.map((e: IMovementTween) => {
-            return {
-                at: e.at,
-                tween: {
-                    targets: this.container,
-                    delay : 0,
-                    x: e.x != null ? e.x : this.instance.x,
-                    y: e.y != null ? e.y : this.instance.y,
-                    duration: e.duration,
-                    ease: e.ease,
-                    repeat: e.repeat,
-                },
-                event : e.event != null ? e.event : "IDLE"
-            }
-        }));
-
-        this.player = this.getMob("ship_0");
+        if(options.tracker) {
+            this.trackerActive = options.tracker;
+        }
     }
 
-    update(time: number, delta: number): void {
+    public update(time: number, delta: number): void {
         super.update(time, delta);
         if (this.scene.timer > this.trackerActive) {
 
@@ -76,26 +61,30 @@ export default class Enemy extends Mob {
                 this.fireRate -= delta;
                 this.fire();
             }
-            if(this.customTimeLine) {
-                this.customTimeLine.play();
-            }
-            if (!this.movementTimeLinePlaying) {
-                this.movementTimeLine.play();
-                this.movementTimeLinePlaying = true;
+
+            if(!this.actionsPlaying) {
+                this.actions.play();
+                this.actionsPlaying = true;
             }
         }
     }
 
-
-    deathCheck() {
+    public deathCheck() {
         if (this.instance.health !== undefined && this.instance.health <= 0) {
             this.onDeath();
         }
     }
 
-    fire(towards : boolean = false) {
+    public setUpActions(action : Phaser.Types.Time.TimelineEvent) {
+        this.actions = this.scene.add.timeline(action);
+        this.enemyEvents();
+    }
+
+    public fire(towards : boolean = false) {
         if (this.fireRate <= 0) {
-            new enemyProjectile({
+            const proj = new enemyProjectile();
+            this.scene.addToMobList(proj,{
+                type : EMobType.projectile,
                 name: "blast",
                 texture: "blast",
                 scene: this.scene,
@@ -104,26 +93,21 @@ export default class Enemy extends Mob {
                 y: this.container.y - 20,
                 runTime: true,
                 hitArea: new Phaser.Geom.Rectangle(-16, -16, 32, 32)
-            },towards,{x:this.container.x,y:this.container.y})
+            })
             this.maxFireRate = this.setRand(2000, 1000);
             this.fireRate = this.maxFireRate;
         }
     }
 
-    addCustomTimeline(customTimeLineOptions : any) {
-        this.customTimeLine = this.scene.add.timeline(customTimeLineOptions.map((e : any)=>{
-            return e;
-        }));
-    }
-
     private enemyEvents() {
-        this.movementTimeLine.on('IDLE',()=>{
+        this.actions.on('IDLE',()=>{
             this.canFire = false;
         })
-        this.movementTimeLine.on('ENABLE_FIRE',()=>{
+        this.actions.on('ENABLE_FIRE',()=>{
             this.canFire = true;
         })
-        this.movementTimeLine.on('DESTROY',()=>{
+        this.actions.on('DESTROY',()=>{
+            this.canFire = false;
             this.destroy();
         })
     }

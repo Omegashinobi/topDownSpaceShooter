@@ -1,4 +1,5 @@
-import Mob, { IMob } from "../mob";
+import { IMob } from "../mob/data/mob";
+import Mob from "../mob/mob";
 
 export default class Projectile extends Mob {
 
@@ -8,26 +9,25 @@ export default class Projectile extends Mob {
     towards : boolean = false;
     origin : {x:number,y:number};
 
-    constructor(options : IMob, towards? : boolean, origin?: {x:number,y:number}) {
-        super(options);
-        this.towards = towards;
-        
-        if(origin) {
-            this.origin = origin;
-        }
+    constructor() {
+        super();
      }
 
     preload(): void {
         super.preload();
     }
 
-    create(): void {
+    create(options : IMob, origin?: {x:number,y:number}): void {
+        if(origin) {
+            this.origin = origin;
+        }
+
         this.collisionList = [
             'enemy',
             'player',
         ];
 
-        super.create();
+        super.create(options);
         this.sprite.play({key: "Emit"});
         this.sprite.chain([{key: "Idle", repeat: -1}]);
 

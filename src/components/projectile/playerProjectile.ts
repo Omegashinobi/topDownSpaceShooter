@@ -1,13 +1,10 @@
-import Mob, { IMob } from "../mob";
+import { IMob } from "../mob/data/mob";
+import Mob from "../mob/mob";
 import Projectile from "./projectile";
 
 export default class PlayerProjectile extends Projectile {
-    constructor(options : IMob) {
-        super(options);
-     }
 
-    create(): void {
-
+    create(options : IMob): void {
         this.onCollision = (other : Mob)=> {
             if(other.instance.tag === "enemy") {
                 this.scene.comboTimer = 3000;
@@ -16,6 +13,6 @@ export default class PlayerProjectile extends Projectile {
             }
         }
 
-        super.create();
+        super.create(options);
     }
 }

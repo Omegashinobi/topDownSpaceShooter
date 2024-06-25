@@ -1,1 +1,26 @@
-{"base":"./assets/","sprites":{"atlas":["alien.json","blast.json","powerUp.json","spaceship.json"],"images":["alien.png","blast.png","default.png","powerUp.png","spaceship.png"]}}
+{
+    "base": "./assets/",
+    "sprites": {
+        "atlas": [
+            "alien.json",
+            "blast.json",
+            "enemyBlast.json",
+            "scoutBlast.json",
+            "powerUp.json",
+            "spaceship.json",
+            "scout.json",
+            "turret.json"
+        ],
+        "images": [
+            "alien.png",
+            "blast.png",
+            "enemyBlast.png",
+            "scoutBlast.png",
+            "default.png",
+            "powerUp.png",
+            "spaceship.png",
+            "scout.png",
+            "turret.png"
+        ]
+    }
+}

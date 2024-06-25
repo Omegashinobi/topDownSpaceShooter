@@ -1,6 +1,6 @@
 import { IMob } from "../mob/data/mob";
 import Mob from "../mob/mob";
-import enemyProjectile from "./enemyProjectile";
+import EnemyProjectile from "./enemyProjectile";
 import Projectile from "./projectile";
 
 interface IBeamOptions {
@@ -10,7 +10,7 @@ interface IBeamOptions {
     end: number,
 }
 
-export default class constantBeam extends enemyProjectile {
+export default class ConstantBeam extends EnemyProjectile {
     private beam : Phaser.Time.Timeline;
     private beamConfig : Phaser.Types.Time.TimelineEventConfig[];
     private beamOptions: IBeamOptions;
@@ -29,9 +29,6 @@ export default class constantBeam extends enemyProjectile {
                 other.destroy();
             }
         }
-
-        this.collisionRect = this.scene.add.rectangle(0,0,0,0);
-        this.container.add(this.collisionRect);
     }
 
     async update(time: number, delta: number): Promise<void> {
@@ -41,7 +38,7 @@ export default class constantBeam extends enemyProjectile {
             this.isFiring = true;
         }
 
-        this.sprite.body.setSize(this.sprite.body.width,0,true);
+        this.container.body.setSize(this.container.body.width,0,true);
     }
 
     setBeamOptions(beamOptions : IBeamOptions) {

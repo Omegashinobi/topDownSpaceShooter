@@ -1,11 +1,11 @@
-import { EMobType, IBossOptions, IEnemyOptions, IMob } from "../mob/data/mob";
-import Mob from "../mob/mob";
-import constantBeam from "../projectile/constantBeam";
+import { IBossOptions, IEnemyOptions, IMob } from "../mob/data/mob";
+import ConstantBeam from "../projectile/constantBeam";
 import Enemy from "./enemy";
 
 export default class Boss extends Enemy {
-
-    private bossParts : Mob[];
+    protected phaseIndex : number;
+    protected phaseMap : Map<number, ()=>void>;
+    protected phases : number[];
 
     public update(time: number, delta: number): void {
         super.update(time, delta);
@@ -13,33 +13,47 @@ export default class Boss extends Enemy {
 
     public create(options: IMob & IEnemyOptions & IBossOptions): void {
         super.create(options);
+    }
 
-        this.bossParts = options.parts.map((e : IMob & IEnemyOptions & IBossOptions)=>{
-            const instance : Mob = this.scene.setUpMobs(e);
-            this.scene.addToMobList(instance,e);
-            return instance;
-        })
+    protected gotoNextPhase() {
+        if((this.phaseIndex + 1) <= this.phaseMap.size) {
+            this.phaseIndex += 1;
+        } else {
+            this.phaseIndex = 0;
+        }
+        this.phaseMap.get(this.phases[this.phaseIndex]).call(this);
+    }
+
+    protected waitPhase() : Phaser.Types.Time.TimelineEventConfig[] {
+        return [{
+            at : 0,
+            tween : {
+                targets: this.body,
+                duration : 2000,
+                onComplete : this.gotoNextPhase
+            },
+        }]
     }
 
     public fire() {
         if (this.fireRate <= 0) {
-            const proj = new constantBeam();
+            const proj = ConstantBeam.spawn({
+                type: "projectile",
+                name: "beam",
+                texture: "enemyBlast",
+                scene: this.scene,
+                speed: 300,
+                x: this.sprite.x,
+                y: this.sprite.y - 20,
+                runTime: true,
+                hitArea: new Phaser.Geom.Rectangle(0, 0, 32, 32)
+            },ConstantBeam) as ConstantBeam;
+
             proj.setBeamOptions({
                 shiftSpeed: 1000,
                 start: 1000,
                 mid: 3000,
                 end: 5000,
-            })
-            this.scene.addToMobList(proj, {
-                type: EMobType.projectile,
-                name: "beam",
-                texture: "blast",
-                scene: this.scene,
-                speed: 300,
-                x: this.container.x,
-                y: this.container.y - 20,
-                runTime: true,
-                hitArea: new Phaser.Geom.Rectangle(0, 0, 32, 32)
             })
 
             this.canFire = false;

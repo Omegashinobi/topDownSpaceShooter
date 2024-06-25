@@ -1,6 +1,6 @@
-import { EMobType, IEnemyOptions, IMob } from "../mob/data/mob";
+import { IMob } from "../mob/data/mob";
 import Mob from "../mob/mob";
-import enemyProjectile from "../projectile/enemyProjectile";
+import EnemyProjectile from "../projectile/enemyProjectile";
 
 export default class Enemy extends Mob {
     public movementActive: boolean = true;
@@ -10,25 +10,29 @@ export default class Enemy extends Mob {
     protected fireRate: number;
     protected maxFireRate: number = this.setRand(2000, 1000);
 
-    public actions : any;
-
-    private actionsPlaying: boolean = false;
-
     public canFire : boolean = false;
 
     public trackerActive: number;
 
-
     public player : Mob;
 
+    public spawnProtect = 2000;
 
     collisionList: string[];
 
     constructor() {
         super();
+
+        this.onSetActive = () => {
+            this.sprite.setVisible(true);
+        };
+
+        this.onSetActive = () => {
+            this.sprite.setVisible(false);
+        };
     }
 
-    public create(options: IMob & IEnemyOptions) : void {
+    public create(options: IMob) : void {
         this.score = 100;
         this.collisionList = [
             'enemy',
@@ -40,20 +44,29 @@ export default class Enemy extends Mob {
 
         this.fireRate = this.maxFireRate;
         super.create(options);
-        this.player = this.scene.findMobByName("ship_0");
+        this.player = this.scene.findMobByName("Player");
 
-        if(options.action) {
-            this.setUpActions(options.action(this));
+        if(options.enemyOptions.action) {
+            this.setUpActions(options.enemyOptions.action(this));
         }
 
-        if(options.tracker) {
-            this.trackerActive = options.tracker;
+        if(options.enemyOptions.tracker) {
+            this.trackerActive = options.enemyOptions.tracker;
         }
+
+        this.canDamage = false;
     }
 
     public update(time: number, delta: number): void {
         super.update(time, delta);
-        if (this.scene.timer > this.trackerActive) {
+        if ((this.scene.timer > this.trackerActive) && this._active) {
+
+            this.spawnProtect -= delta;
+
+            if(this.spawnProtect <= 0) {
+                this.spawnProtect = 0;
+                this.canDamage = true;
+            }
 
             this.deathCheck();
 
@@ -82,18 +95,18 @@ export default class Enemy extends Mob {
 
     public fire(towards : boolean = false) {
         if (this.fireRate <= 0) {
-            const proj = new enemyProjectile();
-            this.scene.addToMobList(proj,{
-                type : EMobType.projectile,
-                name: "blast",
-                texture: "blast",
+            EnemyProjectile.spawn({
+                type : "projectile",
+                name: "scoutBlast",
+                texture: "scoutBlast",
                 scene: this.scene,
-                speed: -100,
-                x: this.container.x,
-                y: this.container.y - 20,
+                speed: -10,
+                x: this.sprite.x,
+                y: this.sprite.y - 20,
                 runTime: true,
-                hitArea: new Phaser.Geom.Rectangle(-16, -16, 32, 32)
-            })
+                hitArea: new Phaser.Geom.Rectangle(-16, -16, 32, 32),
+                movementType : "normal",
+            },EnemyProjectile)
             this.maxFireRate = this.setRand(2000, 1000);
             this.fireRate = this.maxFireRate;
         }

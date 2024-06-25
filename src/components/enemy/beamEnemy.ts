@@ -1,5 +1,5 @@
-import { EMobType, IEnemyOptions, IMob } from "../mob/data/mob";
-import constantBeam from "../projectile/constantBeam";
+import { IEnemyOptions, IMob } from "../mob/data/mob";
+import ConstantBeam from "../projectile/constantBeam";
 import Enemy from "./enemy";
 
 export default class BeamEnemy extends Enemy {
@@ -14,23 +14,23 @@ export default class BeamEnemy extends Enemy {
 
     public fire() {
         if (this.fireRate <= 0) {
-            const proj = new constantBeam();
+            const proj = ConstantBeam.spawn({
+                type: "projectile",
+                name: "beam",
+                texture: "enemyBlast",
+                scene: this.scene,
+                speed: 300,
+                x: this.sprite.x,
+                y: this.sprite.y - 20,
+                runTime: true,
+                hitArea: new Phaser.Geom.Rectangle(0, 0, 32, 32)
+            }, ConstantBeam);
+
             proj.setBeamOptions({
                 shiftSpeed: 1000,
                 start: 1000,
                 mid: 3000,
                 end: 5000,
-            })
-            this.scene.addToMobList(proj, {
-                type: EMobType.projectile,
-                name: "beam",
-                texture: "blast",
-                scene: this.scene,
-                speed: 300,
-                x: this.container.x,
-                y: this.container.y - 20,
-                runTime: true,
-                hitArea: new Phaser.Geom.Rectangle(0, 0, 32, 32)
             })
 
             this.canFire = false;

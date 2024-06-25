@@ -1,20 +1,11 @@
 import BaseScene from "../../../scene/base/base"
 import Mob from "../mob"
 
-export enum EMobType {
-    player = "player",
-    enemy = "enemy",
-    projectile = "projectile"
-}
-
-export enum EEnemyType { 
-    standard = "standard",
-    beam = "beam",
-    turret = "turret",
-}
+export type TMobType = "player" | "enemy" | "projectile";
+export type TMovementType = "normal" | "rotationBased";
 
 export interface IMob {
-    type : EMobType,
+    type : TMobType,
     name: string,
     tag?: string
     texture: string,
@@ -26,6 +17,9 @@ export interface IMob {
     health?: number,
     killOnOutOfBounds?: boolean
     hitArea : Phaser.Geom.Rectangle,
+    enemyOptions? : IEnemyOptions,
+    movementType? : TMovementType
+    target? : Mob | null;
 }
 
 export interface IDebugOptions {
@@ -35,7 +29,6 @@ export interface IDebugOptions {
 export interface IEnemyOptions {
     action : any,
     tracker: number,
-    enemyType : EEnemyType,
     xTargetOffset? : number,
     yTargetOffset? : number
 }

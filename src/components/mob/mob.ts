@@ -1,19 +1,39 @@
 import BaseScene from "../../scene/base/base";
-import { EMobType, IDebugOptions, IMob } from "./data/mob";
+import { TMobType, IDebugOptions, IEnemyOptions, IMob, TMovementType } from "./data/mob";
+
+interface Constructor<Type extends Mob> {
+    new(): Type;
+}
 
 export default class Mob {
-    protected type: EMobType;
+    protected type: TMobType;
+    protected movementType: TMovementType;
     protected texture: string;
     readonly id: string = this.assignUUID();
     readonly name: string;
     protected textures: any;
     protected animations: Phaser.Animations.Animation[] = [];
-    protected sprite: Phaser.Physics.Arcade.Sprite;
-    protected body: Phaser.Physics.Arcade.Body;
+    public sprite: Phaser.GameObjects.Sprite;
+    public body: Phaser.Physics.Arcade.Body;
     protected hasIdle: boolean;
     protected scene: BaseScene;
-    public container: Phaser.GameObjects.Container;
+    protected actions: any;
+    protected actionsPlaying: boolean = false;
+    protected _active: boolean = true;
+    public container: Phaser.Physics.Arcade.Sprite;
     public instance: IMob;
+    public canDamage: boolean = true;
+
+    protected childMobs: Mob[];
+    protected parentMob: Mob;
+
+    public set active(value: boolean) {
+        this._active = value;
+        value ? this.onSetActive : this.onSetDeactive;
+    }
+    protected onSetActive: () => void;
+    protected onSetDeactive: () => void;
+
     movementSpeed = 0;
     speed: number;
 
@@ -43,24 +63,23 @@ export default class Mob {
     }
 
     create(options: IMob): void {
+        
+
         this.scene = options.scene;
         this.instance = options;
         this.hitArea = options.hitArea;
 
         this.debug = {
-            enabled: true,
+            enabled: false,
             graphics: this.scene.add.graphics()
         }
+        this.container = this.scene.physics.add.sprite(this.instance.x, this.instance.y, this.instance.texture);
+        this.container.setVisible(false);
+        this.sprite = new Phaser.GameObjects.Sprite(this.scene,0,0,this.instance.texture);
+        this.sprite.addToDisplayList()
 
-        this.container = this.scene.add.container(this.instance.x, this.instance.y);
-        this.sprite = this.scene.physics.add.sprite(0, 0, this.instance.texture);
-        this.sprite.setOrigin(0);
-
-        this.container.add(this.sprite);     
-
-        this.container.setInteractive(this.hitArea, Phaser.Geom.Rectangle.Contains);
-        this.body = this.container.body as Phaser.Physics.Arcade.Body;
-
+        this.scene.anims.createFromAseprite(this.instance.name,undefined,this.sprite);
+ 
         if (this.collisionList) {
             this.collisionList.forEach((e: string) => {
                 this.createCollisionData(e);
@@ -88,6 +107,10 @@ export default class Mob {
     }
 
     update(time: number, delta: number): void {
+        this.instance.x = this.container.x;
+        this.instance.y = this.container.y;
+
+        this.sprite.setPosition(this.instance.x,this.instance.y);
         if (this.debug.enabled) {
             this.debugUpdate();
         }
@@ -96,23 +119,22 @@ export default class Mob {
     debugCreate() {
         this.debugOptions = {
             positionText: this.scene.add.text(
-                (0 + this.sprite.width) + 5,
+                (0 + this.container.width) + 5,
                 0,
                 `${this.container.x} , ${this.container.y}`)
         }
 
-        this.scene.input.setDraggable(this.container);
+        // this.scene.input.setDraggable(this.sprite);
 
         this.scene.input.on('drag', (pointe: any, gameObject: any, dragX: any, dragY: any) => {
             gameObject.x = dragX;
             gameObject.y = dragY;
         });
-
-        this.container.add(this.debugOptions.positionText);
     }
 
     debugUpdate() {
         this.debugOptions.positionText.text = `${Math.round(this.container.x)},${Math.round(this.container.y)}`;
+        this.debugOptions.positionText.setPosition(this.container.x + 20,this.container.y)
     }
 
     createCollisionData(otherTag: string) {
@@ -120,8 +142,8 @@ export default class Mob {
         collisionList.forEach((e) => {
             const other: Mob = e;
             this.scene.physics.add.collider(
-                this.sprite,
-                other.sprite, (
+                this.container,
+                other.container, (
                     _this: Phaser.Types.Physics.Arcade.GameObjectWithBody,
                     _that: Phaser.Types.Physics.Arcade.GameObjectWithBody) => {
                 if (_this.body.checkCollision && _that.body.checkCollision) {
@@ -150,15 +172,15 @@ export default class Mob {
     }
 
     destroy() {
-        this.showDamageAnimation();
         this.scene.destroyMob(this);
-
         if (this.score && this.instance.health === 0) {
+            this.showDamageAnimation();
             this.scene.score += this.score;
             this.scene.combo++;
         }
-
+        this.actions?.clear();
         this.container.destroy();
+        this.sprite.destroy();
     }
 
     setRand(max: number, min: number) {
@@ -175,5 +197,39 @@ export default class Mob {
                 this.sprite.setTint(0xffffff);
             }
         }).play();
+    }
+
+    setParentMob(mob: Mob) {
+        this.parentMob = mob;
+        mob.parentMob.childMobs.push(this);
+    }
+
+    setChildMob(mob: Mob) {
+        this.childMobs.push(mob);
+        mob.parentMob = this;
+    }
+
+    public correctSpriteRotation(){
+        let rot = this.container.rotation;
+        this.sprite.setRotation(Mob.counterRotation(rot));
+    }
+
+    public static counterRotation(originalRot : number) {
+        return (-Math.PI + (originalRot - (Math.PI/2)));
+    }
+
+    public static spawn<T extends Mob>(options: IMob, mobType: Constructor<T>) {
+        const instance = new mobType();
+        options.scene.addToMobList(instance);
+        instance.create(options);
+        return instance;
+    }
+
+    public static getAngle(obj1 : Phaser.Geom.Point ,obj2: Phaser.Geom.Point ) {
+        return (Math.atan2(obj2.y - obj1.y, obj2.x - obj1.x) * 180 / Math.PI)
+    }
+
+    public static getRotation(obj1 : Phaser.Geom.Point ,obj2: Phaser.Geom.Point) {
+        return Math.atan2(obj2.y - obj1.y, obj2.x - obj1.x);
     }
 }     

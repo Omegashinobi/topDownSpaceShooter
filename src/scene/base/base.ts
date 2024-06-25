@@ -6,12 +6,6 @@ import ComboMeter from "../../components/UI/comboMeter";
 import ScoreMeter from "../../components/UI/scoreMeter";
 import UIContainer from "../../components/UI/UIContainer";
 import EnemyTracker from "../../components/enemy/enemyTracker";
-import Enemy from "../../components/enemy/enemy";
-import { EEnemyType, EMobType, IEnemyOptions, IMob } from "../../components/mob/data/mob";
-import Player from "../../components/player/player";
-import Projectile from "../../components/projectile/projectile";
-import Turret from "../../components/enemy/turret";
-import BeamEnemy from "../../components/enemy/beamEnemy";
 
 export default class BaseScene extends Phaser.Scene {
 
@@ -55,7 +49,7 @@ export default class BaseScene extends Phaser.Scene {
         this._animations.push(value);
     }
 
-    private mobs: Mob[];
+    private mobs: Mob[] = [];
     private enemyTracker: EnemyTracker;
     private UIcontainer = new UIContainer(this);
     private UI: UI[] = [
@@ -69,48 +63,6 @@ export default class BaseScene extends Phaser.Scene {
     
     constructor() {
         super();
-        this.mobs = mobList(this).map(this.setUpMobs.bind(this));
-    }
-
-    public setUpMobs(e : IMob & IEnemyOptions) : Mob {
-        let instance: Mob;
-        switch (e.type) {
-            case EMobType.player: {
-                instance = new Player() as Mob;
-                break;
-            }
-            case EMobType.enemy: {
-                instance = this.selectEnemyType(e.enemyType);
-                break;
-            }
-            case EMobType.projectile: {
-                instance = new Projectile() as Mob;
-                break;
-            }
-        }
-        return instance;
-    }
-
-    public selectEnemyType(e: EEnemyType) {
-        let instance: Mob;
-        switch (e) {
-            case EEnemyType.standard: {
-                instance = new Enemy() as Mob;
-                break;
-            }
-            case EEnemyType.beam: {
-                instance = new BeamEnemy() as Mob;
-                break;
-            }
-            case EEnemyType.turret: {
-                instance = new Turret() as Mob;
-                break;
-            }
-            default : {
-                instance = new Enemy() as Mob;
-            }
-        }
-        return instance;
     }
 
     public async preload() {
@@ -119,10 +71,6 @@ export default class BaseScene extends Phaser.Scene {
         this.loaded.then(() => {
 
             this.enemyTracker = new EnemyTracker();
-
-            this.mobs.forEach((e) => {
-                e.preload();
-            });
         })
 
     }
@@ -130,13 +78,7 @@ export default class BaseScene extends Phaser.Scene {
     public create() {
         this.loaded.then(() => {
 
-            this.animations.forEach((e) => {
-                this.anims.createFromAseprite(e);
-            });
-
-            this.mobs.forEach((e, i) => {
-                e.create(mobList(this)[i]);
-            })
+            mobList(this);
 
             this.enemyTracker.create(this);
             this.physics.world.enable(this.mobs.map((e: Mob) => e.container), 0);
@@ -181,7 +123,7 @@ export default class BaseScene extends Phaser.Scene {
     }
 
     public findMobByName(name: string): Mob {
-        return this.mobs.find((e) => { return e.name === name });
+        return this.mobs.find((e) => { return e.instance.name === name });
     }
 
     public checkDuplicateName(name: string): boolean {
@@ -192,14 +134,15 @@ export default class BaseScene extends Phaser.Scene {
         let index: number;
         this.mobs.forEach((e, i) => {
             if ((e.id === mob.id)) {
+                e.container.destroy(true);
                 index = i;
             };
         })
         this.mobs.splice(index, 1);
+        mob = null;
     }
 
-    public addToMobList(mob: Mob, config: IMob) {
+    public addToMobList(mob: Mob) {
         this.mobs.push(mob);
-        mob.create(config);
     }
 }

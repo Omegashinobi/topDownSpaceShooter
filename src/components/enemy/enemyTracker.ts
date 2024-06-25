@@ -50,6 +50,7 @@ export default class EnemyTracker {
     }
 
     debugUpdate(delta :number) {
+        this.debugText = new Phaser.GameObjects.Text(this.scene,0,0,"",null);
         this.debugText.text = `Enemy Tracker : ${this.trackerTimer}`
         this.debugGraphicContainer.y += delta;
         Phaser.Display.Align.In.Center(this.lineText,this.zone);

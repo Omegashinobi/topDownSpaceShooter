@@ -26,7 +26,10 @@ export default async function (scene: BaseScene): Promise<void> {
             try {
                 for (let [key, value] of Object.entries(manifest.sprites.atlas)) {
                     scene.load.setBaseURL("/assets/sprites/");
-                    scene.load.aseprite(value.split(".")[0], `${value.split(".")[0]}.png`, value);
+
+                    let filterValue = value.split(".")[0];
+
+                    await scene.load.aseprite(filterValue, `${value.split(".")[0]}.png`, value);
                     scene.animations.push(value.split(".")[0]);
                 }
 
@@ -41,3 +44,7 @@ export default async function (scene: BaseScene): Promise<void> {
         throw new Error(`cannot find game manifest: ${err}`);
     }
 }
+
+// async function tilemapLoader(params:type) {
+    
+// }

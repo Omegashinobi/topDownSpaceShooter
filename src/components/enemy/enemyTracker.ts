@@ -32,10 +32,6 @@ export default class EnemyTracker {
         }
         if(this.isMoving) {
             this.trackerTimer += delta;
-
-            this.mobList.forEach((e)=>{
-                	
-            });
         }
     }
 

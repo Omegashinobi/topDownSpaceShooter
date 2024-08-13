@@ -5,7 +5,6 @@ import EnemyProjectile from "../projectile/enemyProjectile";
 export default class Enemy extends Mob {
     public movementActive: boolean = true;
     public movementPattern: any[] = [];
-    private onDeath: any;
 
     protected fireRate: number;
     protected maxFireRate: number = this.setRand(2000, 1000);
@@ -44,7 +43,7 @@ export default class Enemy extends Mob {
 
         this.fireRate = this.maxFireRate;
         super.create(options);
-        this.player = this.scene.findMobByName("Player");
+        this.player = this.scene.findGameObjectWithTag("player");
 
         if(options.enemyOptions.action) {
             this.setUpActions(options.enemyOptions.action(this));
@@ -68,8 +67,6 @@ export default class Enemy extends Mob {
                 this.canDamage = true;
             }
 
-            this.deathCheck();
-
             if(this.canFire) {
                 this.fireRate -= delta;
                 this.fire();
@@ -79,12 +76,6 @@ export default class Enemy extends Mob {
                 this.actions.play();
                 this.actionsPlaying = true;
             }
-        }
-    }
-
-    public deathCheck() {
-        if (this.instance.health !== undefined && this.instance.health <= 0) {
-            this.onDeath();
         }
     }
 
@@ -99,6 +90,8 @@ export default class Enemy extends Mob {
                 type : "projectile",
                 name: "scoutBlast",
                 texture: "scoutBlast",
+                tag: "enemyProjectile",
+                health:1,
                 scene: this.scene,
                 speed: -10,
                 x: this.sprite.x,

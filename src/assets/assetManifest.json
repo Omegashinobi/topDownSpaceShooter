@@ -9,7 +9,10 @@
             "powerUp.json",
             "spaceship.json",
             "scout.json",
-            "turret.json"
+            "turret.json",
+            "guadian.json",
+            "longBlast.json",
+            "longBlastEmit.json"
         ],
         "images": [
             "alien.png",
@@ -20,7 +23,19 @@
             "powerUp.png",
             "spaceship.png",
             "scout.png",
-            "turret.png"
+            "turret.png",
+            "level1.png",
+            "guadian.png",
+            "longBlast.png",
+            "longBlastEmit.png"
         ]
-    }
+    },
+    "tilemaps": [
+        "level1.json"
+    ],
+    "tilesprites": [
+        "stars_1.png",
+        "stars_2.png",
+        "stars_3.png"
+    ]
 }

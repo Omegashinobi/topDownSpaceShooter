@@ -23,6 +23,7 @@ export default class Mob {
     public container: Phaser.Physics.Arcade.Sprite;
     public instance: IMob;
     public canDamage: boolean = true;
+    protected onDeath: any;
 
     protected childMobs: Mob[];
     protected parentMob: Mob;
@@ -78,7 +79,7 @@ export default class Mob {
         this.sprite = new Phaser.GameObjects.Sprite(this.scene,0,0,this.instance.texture);
         this.sprite.addToDisplayList()
 
-        this.scene.anims.createFromAseprite(this.instance.name,undefined,this.sprite);
+        this.scene.anims.createFromAseprite(this.instance.texture,undefined,this.sprite);
  
         if (this.collisionList) {
             this.collisionList.forEach((e: string) => {
@@ -114,6 +115,8 @@ export default class Mob {
         if (this.debug.enabled) {
             this.debugUpdate();
         }
+
+        this.deathCheck();
     }
 
     debugCreate() {
@@ -151,6 +154,12 @@ export default class Mob {
                 }
             });
         });
+    }
+
+    public deathCheck() {
+        if (this.instance.health !== undefined && this.instance.health <= 0) {
+            this.onDeath();
+        }
     }
 
     onPointerUpFunction(func: any) {

@@ -10,15 +10,15 @@ export default class Level1 extends BaseScene {
         super();
     }
 
-    async preload() {
+    async preload() : Promise<void> {
         super.preload();
     }
 
-    create() {
+    async create() : Promise<void> {
         super.create();
     }
 
-    update(time: number, delta: number): void {
+    async update(time: number, delta: number) : Promise<void> {
         super.update(time,delta);
     }
 }

@@ -14,6 +14,7 @@ export const SIZE_WIDTH_SCREEN = 640;
 export const SIZE_HEIGHT_SCREEN = 480;
 
 let parentContainer = document.getElementsByTagName("body").item(0);
+parentContainer.style.backgroundColor = "black";
 
 const config = {
     type: Phaser.AUTO,
@@ -31,6 +32,9 @@ const config = {
             gravity: { y: 0 },
             debug: false
         }
+    },
+    input: {
+        gamepad : true
     },
     pixelArt: true
 }

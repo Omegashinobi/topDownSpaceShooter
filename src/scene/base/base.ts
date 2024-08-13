@@ -1,11 +1,13 @@
 import Mob from "../../components/mob/mob";
 import mobList from "./base.mobs";
-import baseLoader from "./base.loader";
+import { createMap, loadTileSprites, spriteLoader, tilemapLoader } from "./base.loader";
 import UI from "../../components/UI/UI";
 import ComboMeter from "../../components/UI/comboMeter";
 import ScoreMeter from "../../components/UI/scoreMeter";
 import UIContainer from "../../components/UI/UIContainer";
 import EnemyTracker from "../../components/enemy/enemyTracker";
+import parallax from "../../components/actions/parallax";
+import Player from "../../components/player/player";
 
 export default class BaseScene extends Phaser.Scene {
 
@@ -42,10 +44,10 @@ export default class BaseScene extends Phaser.Scene {
     }
 
     private _animations: string[] = [];
-    public get animations() : string[] {
+    public get animations(): string[] {
         return this._animations;
     }
-    public set animations(value : string) {
+    public set animations(value: string) {
         this._animations.push(value);
     }
 
@@ -56,54 +58,102 @@ export default class BaseScene extends Phaser.Scene {
         new ComboMeter({ x: 100, y: 100, name: "Combo Meter" }, this, this._combo, this._comboTimer),
         new ScoreMeter({ x: 100, y: 10, name: "Score Meter" }, this, this._score)
     ];
-    private loaded: Promise<void>;
+
+    public backGroundCamera: any;
+
+    private loaders: Promise<void>[];
 
     public debug: boolean = true;
     public debugSelected: any;
-    
+
+    public map: Phaser.Tilemaps.Tilemap;
+
+    public background: Phaser.GameObjects.TileSprite[] = [];
+    public player: Mob;
+
     constructor() {
         super();
     }
 
-    public async preload() {
-        this.loaded = baseLoader(this);
-
-        this.loaded.then(() => {
-
-            this.enemyTracker = new EnemyTracker();
-        })
-
-    }
-
-    public create() {
-        this.loaded.then(() => {
-
-            mobList(this);
-
-            this.enemyTracker.create(this);
-            this.physics.world.enable(this.mobs.map((e: Mob) => e.container), 0);
-
-            this.UIcontainer.create();
-            this.UI.forEach((e) => {
-                e.create(this.UIcontainer);
-            })
-        });
-    }
-
-    public update(time: number, delta: number): void {
-
-        this.enemyTracker.update(time, delta);
-
-        this.loaded.then(() => {
-            this.mobs.forEach((e) => {
-                e.update(time, delta);
+    public async preload(): Promise<void> {
+        let OK: boolean;
+        this.loaders = [spriteLoader(this), tilemapLoader(this), loadTileSprites(this)]
+        await Promise.allSettled(this.loaders).then((data) => {
+            OK = data.every((el) => {
+                return el.status === "fulfilled";
             });
+            if (OK) {
+                this.enemyTracker = new EnemyTracker();
+            }
         });
+    }
 
-        this.UI.forEach((e: UI) => {
-            e.update(time, delta);
+    public async create(): Promise<void> {
+        let OK: boolean;
+        await Promise.allSettled(this.loaders).then((data) => {
+            OK = data.every((el) => {
+                return el.status === "fulfilled";
+            });
+            if (OK) {
+
+                this.background[0] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_1");
+                this.background[1] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_2");
+                this.background[2] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_3");
+
+                this.background[1].tilePositionX += 32;
+                this.background[2].tilePositionX -= 32;
+
+                createMap(this, "level1");
+                mobList(this);
+
+                this.enemyTracker.create(this);
+                this.physics.world.enable(this.mobs.map((e: Mob) => e.container), 0);
+
+                this.UIcontainer.create();
+                this.UI.forEach((e) => {
+                    e.create(this.UIcontainer);
+                });
+
+                this.player = this.findGameObjectWithTag("player");
+            }
         })
-        this.timer += delta;
+    }
+
+    public async update(time: number, delta: number): Promise<void> {
+        let OK: boolean;
+        await Promise.allSettled(this.loaders).then((data) => {
+            OK = data.every((el) => {
+                return el.status === "fulfilled";
+            });
+            if (OK) {
+                this.mobs.forEach((e) => {
+                    e.update(time, delta);
+                });
+
+                this.enemyTracker.update(time, delta);
+                this.UI.forEach((e: UI) => {
+                    e.update(time, delta);
+                });
+
+                // this.background[0].tilePositionX = (-this.player.container.x / delta);
+                // this.background[1].tilePositionX = (-this.player.container.x / delta);
+                // this.background[2].tilePositionX = (-this.player.container.x / delta);
+
+                // this.background[0].tilePositionY -= 0.2;
+                this.background[1].tilePositionY -= 0.4;
+                this.background[2].tilePositionY -= 0.6;
+
+
+                this.timer += delta;
+
+                if(this.enemyTracker.isMoving) {
+                    this.map.layers.forEach((e : Phaser.Tilemaps.LayerData )=>{
+                        e.tilemapLayer.y += delta;
+                    })
+                }
+            }
+
+        })
     }
 
     public findGameObjectWithTag(tag: string): Mob {
@@ -144,5 +194,15 @@ export default class BaseScene extends Phaser.Scene {
 
     public addToMobList(mob: Mob) {
         this.mobs.push(mob);
+    }
+
+    public paralexOffset(layer: Phaser.Tilemaps.LayerData, offsetX: number, offsetY: number, speed: number) {
+        const mob = this.findGameObjectWithTag("player");
+
+        if (mob) {
+            layer.tilemapLayer.x = mob.instance.x - offsetX;
+            layer.tilemapLayer.y = mob.instance.y - offsetY;
+        }
+
     }
 }

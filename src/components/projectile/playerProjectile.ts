@@ -5,8 +5,14 @@ import Projectile from "./projectile";
 export default class PlayerProjectile extends Projectile {
 
     create(options : IMob): void {
+
+        const destoryables : string[] = [
+            "enemy",
+            "enemyProjectile"
+        ];
+
         this.onCollision = (other : Mob)=> {
-            if(other.instance.tag === "enemy") {
+            if(destoryables.indexOf(other.instance.tag) !== -1) {
                 if(other.canDamage) {
                     this.scene.comboTimer = 3000;
                     other.instance.health -=1;

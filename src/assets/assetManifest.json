@@ -10,9 +10,10 @@
             "spaceship.json",
             "scout.json",
             "turret.json",
-            "guadian.json",
+            "guardian.json",
             "longBlast.json",
-            "longBlastEmit.json"
+            "longBlastEmit.json",
+            "astroid.json"
         ],
         "images": [
             "alien.png",
@@ -25,9 +26,10 @@
             "scout.png",
             "turret.png",
             "level1.png",
-            "guadian.png",
+            "guardian.png",
             "longBlast.png",
-            "longBlastEmit.png"
+            "longBlastEmit.png",
+            "astroid.png"
         ]
     },
     "tilemaps": [

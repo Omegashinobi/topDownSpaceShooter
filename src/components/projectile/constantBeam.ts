@@ -20,6 +20,9 @@ export default class ConstantBeam extends EnemyProjectile {
     create(options: IMob): void {
         super.create(options);
 
+        this.container.x = options.x;
+        this.container.y = options.y;
+
         this.setupBeamControll();
         this.beam = this.scene.add.timeline(this.beamConfig);
 
@@ -49,7 +52,7 @@ export default class ConstantBeam extends EnemyProjectile {
         this.beamConfig = [{
             at: 1000,
             tween: {
-                targets: this.sprite.body,
+                targets: this.container.body,
                 duration: 1000 *2,
                 height:0,
                 width:128,
@@ -59,7 +62,7 @@ export default class ConstantBeam extends EnemyProjectile {
         {
             at: 2000,
             tween: {
-                targets: this.sprite.body,
+                targets: this.container.body,
                 duration: 1000,
                 height:1024,
                 width:128,
@@ -69,7 +72,7 @@ export default class ConstantBeam extends EnemyProjectile {
         {
             at: 3000,
             tween: {
-                targets: this.sprite.body,
+                targets: this.container.body,
                 duration: 1000 *2,
                 height:1024,
                 width:0,

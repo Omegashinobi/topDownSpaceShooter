@@ -6,6 +6,7 @@ import Mob from "../../components/mob/mob";
 import { MAX_SIZE_HEIGHT_SCREEN, MAX_SIZE_WIDTH_SCREEN } from "../../app";
 import Enemy from "../../components/enemy/enemy";
 import Turret from "../../components/enemy/turret";
+import BeamEnemy from "../../components/enemy/beamEnemy";
 
 export default function (scene: BaseScene): Mob[] {
     return [
@@ -21,6 +22,60 @@ export default function (scene: BaseScene): Mob[] {
             hitArea: new Phaser.Geom.Rectangle(0, 0, 64, 64),
             scene: scene
         }, Player),
+        Enemy.spawn({
+            type: "enemy",
+            name: "astroid",
+            tag: "enemy",
+            x: 384,
+            y: -64,
+            texture: "astroid",
+            speed: 10,
+            health: 10,
+            hitArea: new Phaser.Geom.Rectangle(0, 0, 64, 64),
+            scene: scene,
+            enemyOptions: {
+                action: actions.slowDrift,
+                tracker: 5000,
+                xTargetOffset: 384,
+                yTargetOffset: 0
+            }
+        }, Enemy),
+        Enemy.spawn({
+            type: "enemy",
+            name: "astroid",
+            tag: "enemy",
+            x: 32,
+            y: -64,
+            texture: "astroid",
+            speed: 10,
+            health: 10,
+            hitArea: new Phaser.Geom.Rectangle(0, 0, 64, 64),
+            scene: scene,
+            enemyOptions: {
+                action: actions.slowDrift,
+                tracker: 8000,
+                xTargetOffset: 32,
+                yTargetOffset: 0
+            }
+        }, Enemy),
+        Enemy.spawn({
+            type: "enemy",
+            name: "astroid",
+            tag: "enemy",
+            x: 512,
+            y: -64,
+            texture: "astroid",
+            speed: 10,
+            health: 10,
+            hitArea: new Phaser.Geom.Rectangle(0, 0, 64, 64),
+            scene: scene,
+            enemyOptions: {
+                action: actions.slowDrift,
+                tracker: 10000,
+                xTargetOffset: 512,
+                yTargetOffset: 0
+            }
+        }, Enemy),
         // Turret.spawn({
         //     type: "enemy",
         //     name: "Turret",
@@ -127,7 +182,7 @@ export default function (scene: BaseScene): Mob[] {
         //         yTargetOffset: -32
         //     }
         // },Enemy)
-        Enemy.spawn({
+        BeamEnemy.spawn({
             type: "enemy",
             name: "guardian",
             tag: "enemy",
@@ -139,12 +194,12 @@ export default function (scene: BaseScene): Mob[] {
             hitArea: new Phaser.Geom.Rectangle(0, 0, 64, 64),
             scene: scene,
             enemyOptions: {
-                action: actions.FromTopCenter,
-                tracker: 5000,
+                action: actions.FromTopCenterBeam,
+                tracker: 7000,
                 xTargetOffset: 384,
                 yTargetOffset: -32
             }
-        }, Enemy)
+        }, BeamEnemy)
 
     ] as Mob[]
 }

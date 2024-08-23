@@ -80,6 +80,8 @@ export default class Mob {
         this.sprite.addToDisplayList()
 
         this.scene.anims.createFromAseprite(this.instance.texture,undefined,this.sprite);
+
+        this.sprite.play({ key: `idle`, repeat: -1 });
  
         if (this.collisionList) {
             this.collisionList.forEach((e: string) => {

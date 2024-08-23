@@ -17,11 +17,11 @@ export default class BeamEnemy extends Enemy {
             const proj = ConstantBeam.spawn({
                 type: "projectile",
                 name: "beam",
-                texture: "enemyBlast",
+                texture: "longBlast",
                 scene: this.scene,
                 speed: 300,
-                x: this.sprite.x,
-                y: this.sprite.y - 20,
+                x: this.container.x,
+                y: this.container.y - 20,
                 runTime: true,
                 hitArea: new Phaser.Geom.Rectangle(0, 0, 32, 32)
             }, ConstantBeam);

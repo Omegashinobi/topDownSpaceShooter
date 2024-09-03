@@ -1,6 +1,6 @@
 import Mob from "../../components/mob/mob";
 import mobList from "./base.mobs";
-import { createMap, loadTileSprites, spriteLoader, tilemapLoader } from "./base.loader";
+import { createMap, loadEnemyData, loadTileSprites, setupEnemyData, spriteLoader, tilemapLoader } from "./base.loader";
 import UI from "../../components/UI/UI";
 import ComboMeter from "../../components/UI/comboMeter";
 import ScoreMeter from "../../components/UI/scoreMeter";
@@ -67,9 +67,11 @@ export default class BaseScene extends Phaser.Scene {
     public debugSelected: any;
 
     public map: Phaser.Tilemaps.Tilemap;
+    public layoutMap: Phaser.Tilemaps.Tilemap[] = [];
 
     public background: Phaser.GameObjects.TileSprite[] = [];
     public player: Mob;
+
 
     constructor() {
         super();
@@ -77,7 +79,7 @@ export default class BaseScene extends Phaser.Scene {
 
     public async preload(): Promise<void> {
         let OK: boolean;
-        this.loaders = [spriteLoader(this), tilemapLoader(this), loadTileSprites(this)]
+        this.loaders = [spriteLoader(this), tilemapLoader(this), loadTileSprites(this), loadEnemyData(this)]
         await Promise.allSettled(this.loaders).then((data) => {
             OK = data.every((el) => {
                 return el.status === "fulfilled";
@@ -105,6 +107,7 @@ export default class BaseScene extends Phaser.Scene {
 
                 createMap(this, "level1");
                 mobList(this);
+                setupEnemyData(this,"level1");
 
                 this.enemyTracker.create(this);
                 this.physics.world.enable(this.mobs.map((e: Mob) => e.container), 0);
@@ -135,11 +138,6 @@ export default class BaseScene extends Phaser.Scene {
                     e.update(time, delta);
                 });
 
-                // this.background[0].tilePositionX = (-this.player.container.x / delta);
-                // this.background[1].tilePositionX = (-this.player.container.x / delta);
-                // this.background[2].tilePositionX = (-this.player.container.x / delta);
-
-                // this.background[0].tilePositionY -= 0.2;
                 this.background[1].tilePositionY -= 0.4;
                 this.background[2].tilePositionY -= 0.6;
 

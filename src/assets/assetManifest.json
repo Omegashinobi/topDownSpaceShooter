@@ -39,5 +39,8 @@
         "stars_1.png",
         "stars_2.png",
         "stars_3.png"
+    ],
+    "layout" : [
+        "enemy_level1_0-45.json"
     ]
 }

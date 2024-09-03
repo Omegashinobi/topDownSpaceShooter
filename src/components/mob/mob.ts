@@ -24,6 +24,7 @@ export default class Mob {
     public instance: IMob;
     public canDamage: boolean = true;
     protected onDeath: any;
+    public destoryChildren: boolean = false;
 
     protected childMobs: Mob[];
     protected parentMob: Mob;
@@ -188,6 +189,9 @@ export default class Mob {
             this.showDamageAnimation();
             this.scene.score += this.score;
             this.scene.combo++;
+        }
+        if(this.destoryChildren) {
+            this.childMobs.forEach(e => e.destroy); 
         }
         this.actions?.clear();
         this.container.destroy();

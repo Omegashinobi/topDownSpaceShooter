@@ -136,7 +136,7 @@ export const actions = {
             event: "DESTROY"
         }]
     },
-    slowDrift: (gameObject: Mob): Phaser.Types.Time.TimelineEventConfig[] => {
+    SlowDrift: (gameObject: Mob): Phaser.Types.Time.TimelineEventConfig[] => {
         return [{
             at: 0,
             tween: {
@@ -148,4 +148,14 @@ export const actions = {
             },
         }]
     },
+}
+
+export function findAction(search : string) {
+    let action : (gameObject: Mob)=>void
+    switch(search) {
+        case "FromTopCenter" : { action = actions.FromTopCenter; break;}
+        case "FromTopCenterBeam" : { action = actions.FromTopCenterBeam; break;}
+        case "SlowDrift" : { action = actions.SlowDrift; break;}
+    }
+    return action;
 }

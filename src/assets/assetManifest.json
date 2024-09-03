@@ -13,7 +13,8 @@
             "guardian.json",
             "longBlast.json",
             "longBlastEmit.json",
-            "astroid.json"
+            "astroid.json",
+            "UIText.json"
         ],
         "images": [
             "alien.png",
@@ -29,7 +30,8 @@
             "guardian.png",
             "longBlast.png",
             "longBlastEmit.png",
-            "astroid.png"
+            "astroid.png",
+            "UIText.png"
         ]
     },
     "tilemaps": [

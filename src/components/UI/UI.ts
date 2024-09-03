@@ -9,7 +9,7 @@ export interface IUI {
 
 export default class UI {
 
-    text : Phaser.GameObjects.Text;
+    text : Phaser.GameObjects.Sprite;
     bitmapText : Phaser.GameObjects.BitmapText;
     container : Phaser.GameObjects.Container;
     scene : Phaser.Scene;

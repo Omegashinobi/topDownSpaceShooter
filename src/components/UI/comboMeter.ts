@@ -3,7 +3,7 @@ import UIContainer from "./UIContainer";
 
 export default class ComboMeter extends UI {
 
-    text : Phaser.GameObjects.Text;
+    text : Phaser.GameObjects.Sprite;
     valueText : Phaser.GameObjects.Text;
     value : number[] = [0];
 
@@ -34,8 +34,9 @@ export default class ComboMeter extends UI {
         //     "offset.y" : 0,
         // }));
 
-        this.text = this.scene.add.text(0,0,"Combo Meter");
-        this.valueText = this.scene.add.text(70,30,`x ${this.value[0].toString()}`);
+        this.text = this.scene.add.sprite(0,0,"UIText",0);
+        this.valueText = this.scene.add.text(80,0,`x ${this.value[0].toString()}`);
+        this.valueText.setFontSize(20)
         this.addElements([this.valueText]);
     }
 

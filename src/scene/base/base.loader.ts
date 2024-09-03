@@ -25,18 +25,72 @@ interface iManifest {
 
 let manifest: iManifest = assetManifest;
 
+let files = [];
+let queue = new Map<number, { type: string, file: () => void }>
+
+let _loadIndex: number = 0;
+let maxLoadIndex: number = 0;
+
+let loadIndex = () => { return maxLoadIndex++ }
+
+
+export function load(scene: BaseScene): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const loader: Phaser.Loader.LoaderPlugin = new Phaser.Loader.LoaderPlugin(scene);
+
+            spriteLoader(loader, scene, queue);
+            tilemapLoader(loader, queue);
+            loadTileSprites(loader, queue);
+            loadEnemyData(loader, queue);
+
+            loader.setBaseURL("/assets/sprites/");
+            loader.image("default", "default.png")
+
+            maxLoadIndex = queue.size;
+
+            loader.on("load", async (data: any) => {
+                console.log(`loaded: ${data.key} >>> ${data.src} || type: ${data.type}`);
+                loader.setBaseURL("/assets/");
+
+                if (_loadIndex < maxLoadIndex) {
+                    let nextLoad = queue.get(_loadIndex);
+
+                    _loadIndex++;
+                    nextLoad.file();
+
+                }
+            });
+
+            loader.on("complete", () => {
+                if (_loadIndex === maxLoadIndex) {
+                    resolve();
+                }
+            });
+
+            loader.on("error", (data: any) => {
+                reject();
+                throw new Error(data);
+            });
+
+            loader.start();
+        } catch (err) {
+            alert(err);
+            reject();
+        }
+    })
+}
+
 export let animationList: IAnimationList[] = [];
 
-export async function spriteLoader(scene: BaseScene): Promise<void> {
+export async function spriteLoader(loader: Phaser.Loader.LoaderPlugin, scene: BaseScene, queue: Map<number, { type: string, file: () => void }>): Promise<void> {
     try {
         return new Promise(async (resolve, reject) => {
             try {
                 for (let [key, value] of Object.entries(manifest.sprites.atlas)) {
-                    scene.load.setBaseURL("/assets/sprites/");
-
                     let filterValue = value.split(".")[0];
+                    queue.set(loadIndex(), { type: "aseprite", file: () => loader.aseprite(filterValue, `/sprites/${value.split(".")[0]}.png`, `/sprites/${value}`) });
 
-                    await scene.load.aseprite(filterValue, `${value.split(".")[0]}.png`, value);
                     scene.animations.push(value.split(".")[0]);
                 }
 
@@ -52,13 +106,15 @@ export async function spriteLoader(scene: BaseScene): Promise<void> {
     }
 }
 
-export async function tilemapLoader(scene: BaseScene): Promise<void> {
+export async function tilemapLoader(loader: Phaser.Loader.LoaderPlugin, queue: Map<number, { type: string, file: () => void }>): Promise<void> {
     return new Promise(async (resolve, reject) => {
         try {
             for (let [key, value] of Object.entries(manifest.tilemaps)) {
-                scene.load.setBaseURL("/assets/tilemaps/");
-                scene.load.image(value.split(".")[0], `${value.split(".")[0]}.png`);
-                scene.load.tilemapTiledJSON(value.split(".")[0], value);
+
+
+                queue.set(loadIndex(), { type: "tilemap_image", file: () => loader.image(value.split(".")[0], `/tileMaps/${value.split(".")[0]}.png`) });
+                queue.set(loadIndex(), { type: "tilemap_json", file: () => loader.tilemapTiledJSON(value.split(".")[0], `/tileMaps/${value}`) });
+
             }
             resolve();
         } catch (err: any) {
@@ -81,22 +137,21 @@ export function createMap(scene: BaseScene, value: string): Promise<void> {
     })
 }
 
-export function loadTileSprites(scene: BaseScene): Promise<void> {
-    return new Promise((resolve, reject) => {
+export function loadTileSprites(loader: Phaser.Loader.LoaderPlugin, queue: Map<number, { type: string, file: () => void }>): Promise<void> {
+    return new Promise(async (resolve, reject) => {
         for (let [key, value] of Object.entries(manifest.tilesprites)) {
-            scene.load.setBaseURL("/assets/tilesprites/");
-            scene.load.image(`tilesprite_${value.split(".")[0]}`, value);
+            queue.set(loadIndex(), { type: "tilesprite", file: () => loader.image(`tilesprite_${value.split(".")[0]}`, `/tilesprites/${value}`) });
+
         }
         resolve();
     })
 }
 
-export function loadEnemyData(scene: BaseScene): Promise<void> {
+export function loadEnemyData(loader: Phaser.Loader.LoaderPlugin, queue: Map<number, { type: string, file: () => void }>): Promise<void> {
     return new Promise(async (resolve, reject) => {
         try {
             for (let [key, value] of Object.entries(manifest.layout)) {
-                scene.load.setBaseURL("/assets/layout/");
-                scene.load.tilemapTiledJSON(value.split(".")[0], value);
+                queue.set(loadIndex(), { type: "enemydata", file: () => loader.tilemapTiledJSON(value.split(".")[0], `/layout/${value}`) });
             }
             resolve();
         } catch (err: any) {
@@ -110,34 +165,34 @@ export function setupEnemyData(scene: BaseScene, value: string): Promise<void> {
     return new Promise((resolve, reject) => {
         let i = 0;
         try {
-            const mapfile = `enemy_${value}_${i*45}-${(i+1)*45}`;
+            const mapfile = `enemy_${value}_${i * 45}-${(i + 1) * 45}`;
             const currentMap = scene.make.tilemap({ key: mapfile });
 
             scene.layoutMap.push(currentMap);
-            const enemies = currentMap.objects.find((e)=>{return e.name === "enemies"}).objects
+            const enemies = currentMap.objects.find((e) => { return e.name === "enemies" }).objects;
             enemies.forEach((e) => {
-                const hitArea = e.properties.find((el : any) => el.name === "hitArea").value.split(",")
+                const hitArea = e.properties.find((el: any) => el.name === "hitArea").value.split(",");
 
-                let mob : Mob = enemySpawner(e.type.toLowerCase(),{
-                    type : e.type.toLowerCase() as TMobType,
+                enemySpawner(e.type.toLowerCase(), {
+                    type: e.type.toLowerCase() as TMobType,
                     name: e.name,
-                    tag: e.properties.find((el : any) => el.name === "tag").value,
-                    texture: e.properties.find((el : any) => el.name === "texture").value,
-                    speed: e.properties.find((el : any) => el.name === "speed").value,
+                    tag: e.properties.find((el: any) => el.name === "tag").value,
+                    texture: e.properties.find((el: any) => el.name === "texture").value,
+                    speed: e.properties.find((el: any) => el.name === "speed").value,
                     scene: scene,
                     x: e.x,
-                    y: 0-hitArea[3],
-                    health: e.properties.find((el : any) => el.name === "health").value,
-                    hitArea : new Phaser.Geom.Rectangle(hitArea[0],hitArea[1],hitArea[2],hitArea[3]),
-                    enemyOptions : {
-                        action : findAction(e.properties.find((el : any) => el.name === "enemyOptions_action").value),
-                        tracker: e.properties.find((el : any) => el.name === "enemyOptions_tracker").value,
-                        xTargetOffset : e.properties.find((el : any) => el.name === "enemyOptions_xTargetOffset").value,
-                        yTargetOffset : e.properties.find((el : any) => el.name === "enemyOptions_yTargetOffset").value
+                    y: 0 - hitArea[3],
+                    health: e.properties.find((el: any) => el.name === "health").value,
+                    hitArea: new Phaser.Geom.Rectangle(hitArea[0], hitArea[1], hitArea[2], hitArea[3]),
+                    enemyOptions: {
+                        action: findAction(e.properties.find((el: any) => el.name === "enemyOptions_action").value),
+                        tracker: e.properties.find((el: any) => el.name === "enemyOptions_tracker").value,
+                        xTargetOffset: e.properties.find((el: any) => el.name === "enemyOptions_xTargetOffset").value,
+                        yTargetOffset: e.properties.find((el: any) => el.name === "enemyOptions_yTargetOffset").value
                     },
                 });
             })
-            
+            i++;
             resolve();
         }
         catch (err) {

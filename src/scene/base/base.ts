@@ -1,6 +1,6 @@
 import Mob from "../../components/mob/mob";
 import mobList from "./base.mobs";
-import { createMap, loadEnemyData, loadTileSprites, setupEnemyData, spriteLoader, tilemapLoader } from "./base.loader";
+import { createMap, load, loadEnemyData, loadTileSprites, setupEnemyData, spriteLoader, tilemapLoader } from "./base.loader";
 import UI from "../../components/UI/UI";
 import ComboMeter from "../../components/UI/comboMeter";
 import ScoreMeter from "../../components/UI/scoreMeter";
@@ -8,6 +8,7 @@ import UIContainer from "../../components/UI/UIContainer";
 import EnemyTracker from "../../components/enemy/enemyTracker";
 import parallax from "../../components/actions/parallax";
 import Player from "../../components/player/player";
+import { resolve } from "path-browserify";
 
 export default class BaseScene extends Phaser.Scene {
 
@@ -55,8 +56,8 @@ export default class BaseScene extends Phaser.Scene {
     private enemyTracker: EnemyTracker;
     private UIcontainer = new UIContainer(this);
     private UI: UI[] = [
-        new ComboMeter({ x: 100, y: 100, name: "Combo Meter" }, this, this._combo, this._comboTimer),
-        new ScoreMeter({ x: 100, y: 10, name: "Score Meter" }, this, this._score)
+        new ComboMeter({ x: 100, y: 80, name: "Combo Meter" }, this, this._combo, this._comboTimer),
+        new ScoreMeter({ x: 100, y: 32, name: "Score Meter" }, this, this._score)
     ];
 
     public backGroundCamera: any;
@@ -71,87 +72,68 @@ export default class BaseScene extends Phaser.Scene {
 
     public background: Phaser.GameObjects.TileSprite[] = [];
     public player: Mob;
-
+    public setReady : ()=>void;
+    public ready: Promise<void> = new Promise((resolve) => this.setReady = resolve);
+    
 
     constructor() {
         super();
     }
 
     public async preload(): Promise<void> {
-        let OK: boolean;
-        this.loaders = [spriteLoader(this), tilemapLoader(this), loadTileSprites(this), loadEnemyData(this)]
-        await Promise.allSettled(this.loaders).then((data) => {
-            OK = data.every((el) => {
-                return el.status === "fulfilled";
-            });
-            if (OK) {
-                this.enemyTracker = new EnemyTracker();
-            }
+        await load(this).then(() => {
+            this.enemyTracker = new EnemyTracker();
+            this.setReady()
         });
     }
 
     public async create(): Promise<void> {
-        let OK: boolean;
-        await Promise.allSettled(this.loaders).then((data) => {
-            OK = data.every((el) => {
-                return el.status === "fulfilled";
-            });
-            if (OK) {
+        await this.ready;
+        this.background[0] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_1");
+        this.background[1] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_2");
+        this.background[2] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_3");
 
-                this.background[0] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_1");
-                this.background[1] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_2");
-                this.background[2] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_3");
+        this.background[1].tilePositionX += 32;
+        this.background[2].tilePositionX -= 32;
 
-                this.background[1].tilePositionX += 32;
-                this.background[2].tilePositionX -= 32;
+        createMap(this, "level1");
+        mobList(this);
+        setupEnemyData(this, "level1");
 
-                createMap(this, "level1");
-                mobList(this);
-                setupEnemyData(this,"level1");
+        this.enemyTracker.create(this);
+        this.physics.world.enable(this.mobs.map((e: Mob) => e.container), 0);
 
-                this.enemyTracker.create(this);
-                this.physics.world.enable(this.mobs.map((e: Mob) => e.container), 0);
+        this.UIcontainer.create();
+        this.UI.forEach((e) => {
+            e.create(this.UIcontainer);
+        });
 
-                this.UIcontainer.create();
-                this.UI.forEach((e) => {
-                    e.create(this.UIcontainer);
-                });
-
-                this.player = this.findGameObjectWithTag("player");
-            }
-        })
+        this.player = this.findGameObjectWithTag("player");
     }
 
     public async update(time: number, delta: number): Promise<void> {
-        let OK: boolean;
-        await Promise.allSettled(this.loaders).then((data) => {
-            OK = data.every((el) => {
-                return el.status === "fulfilled";
-            });
-            if (OK) {
-                this.mobs.forEach((e) => {
-                    e.update(time, delta);
-                });
+        await this.ready;
 
-                this.enemyTracker.update(time, delta);
-                this.UI.forEach((e: UI) => {
-                    e.update(time, delta);
-                });
+        this.mobs.forEach((e) => {
+            e.update(time, delta);
+        });
 
-                this.background[1].tilePositionY -= 0.4;
-                this.background[2].tilePositionY -= 0.6;
+        this.enemyTracker.update(time, delta);
+        this.UI.forEach((e: UI) => {
+            e.update(time, delta);
+        });
+
+        this.background[1].tilePositionY -= 0.4;
+        this.background[2].tilePositionY -= 0.6;
 
 
-                this.timer += delta;
+        this.timer += delta;
 
-                if(this.enemyTracker.isMoving) {
-                    this.map.layers.forEach((e : Phaser.Tilemaps.LayerData )=>{
-                        e.tilemapLayer.y += delta;
-                    })
-                }
-            }
-
-        })
+        if (this.enemyTracker.isMoving) {
+            this.map.layers.forEach((e: Phaser.Tilemaps.LayerData) => {
+                e.tilemapLayer.y += delta;
+            })
+        }
     }
 
     public findGameObjectWithTag(tag: string): Mob {

@@ -7,11 +7,11 @@ let scenes = [
 ]
 
 export const MAX_SIZE_WIDTH_SCREEN = 640;
-export const MAX_SIZE_HEIGHT_SCREEN = 480;
+export const MAX_SIZE_HEIGHT_SCREEN = 640;
 export const MIN_SIZE_WIDTH_SCREEN = window.innerWidth;
 export const MIN_SIZE_HEIGHT_SCREEN = window.innerHeight;
 export const SIZE_WIDTH_SCREEN = 640;
-export const SIZE_HEIGHT_SCREEN = 480;
+export const SIZE_HEIGHT_SCREEN = 640;
 
 let parentContainer = document.getElementsByTagName("body").item(0);
 parentContainer.style.backgroundColor = "black";
@@ -26,6 +26,7 @@ const config = {
         width: SIZE_WIDTH_SCREEN,
         height: SIZE_HEIGHT_SCREEN,
     },
+    backgroundColor:'#181425',
     physics: {
         default: 'arcade',
         arcade: {

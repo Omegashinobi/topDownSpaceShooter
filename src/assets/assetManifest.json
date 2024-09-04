@@ -43,6 +43,10 @@
         "stars_3.png"
     ],
     "layout" : [
-        "enemy_level1_0-45.json"
+        "enemy_level1_0-45.json",
+        "enemy_level1_45-90.json"
+    ],
+    "bitmapFont": [
+        "comboFont.fnt"
     ]
 }

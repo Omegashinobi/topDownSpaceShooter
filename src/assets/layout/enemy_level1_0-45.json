@@ -30,7 +30,7 @@
          "objects":[
                 {
                  "gid":100,
-                 "height":64,
+                 "height":128,
                  "id":19,
                  "name":"astroid",
                  "properties":[
@@ -42,12 +42,12 @@
                         {
                          "name":"enemyOptions_tracker",
                          "type":"int",
-                         "value":4500
+                         "value":45000
                         }, 
                         {
                          "name":"enemyOptions_xTargetOffset",
                          "type":"int",
-                         "value":128
+                         "value":0
                         }, 
                         {
                          "name":"enemyOptions_yTargetOffset",
@@ -62,7 +62,7 @@
                         {
                          "name":"hitArea",
                          "type":"string",
-                         "value":"0,0,64,64"
+                         "value":"0,0,128,128"
                         }, 
                         {
                          "name":"speed",
@@ -87,13 +87,13 @@
                  "rotation":0,
                  "type":"enemy",
                  "visible":true,
-                 "width":64,
+                 "width":128,
                  "x":128,
-                 "y":64
+                 "y":128
                 }, 
                 {
                  "gid":100,
-                 "height":64,
+                 "height":128,
                  "id":38,
                  "name":"astroid",
                  "properties":[
@@ -105,12 +105,12 @@
                         {
                          "name":"enemyOptions_tracker",
                          "type":"int",
-                         "value":2500
+                         "value":25000
                         }, 
                         {
                          "name":"enemyOptions_xTargetOffset",
                          "type":"int",
-                         "value":64
+                         "value":544
                         }, 
                         {
                          "name":"enemyOptions_yTargetOffset",
@@ -125,7 +125,7 @@
                         {
                          "name":"hitArea",
                          "type":"string",
-                         "value":"0,0,64,64"
+                         "value":"0,0,128,128"
                         }, 
                         {
                          "name":"speed",
@@ -150,13 +150,13 @@
                  "rotation":0,
                  "type":"enemy",
                  "visible":true,
-                 "width":64,
+                 "width":128,
                  "x":64,
-                 "y":320
+                 "y":384
                 }, 
                 {
                  "gid":100,
-                 "height":64,
+                 "height":128,
                  "id":39,
                  "name":"astroid",
                  "properties":[
@@ -168,12 +168,12 @@
                         {
                          "name":"enemyOptions_tracker",
                          "type":"int",
-                         "value":1500
+                         "value":15000
                         }, 
                         {
                          "name":"enemyOptions_xTargetOffset",
                          "type":"int",
-                         "value":256
+                         "value":416
                         }, 
                         {
                          "name":"enemyOptions_yTargetOffset",
@@ -188,7 +188,7 @@
                         {
                          "name":"hitArea",
                          "type":"string",
-                         "value":"0,0,64,64"
+                         "value":"0,0,128,128"
                         }, 
                         {
                          "name":"speed",
@@ -213,13 +213,13 @@
                  "rotation":0,
                  "type":"enemy",
                  "visible":true,
-                 "width":64,
+                 "width":128,
                  "x":256,
-                 "y":448
+                 "y":512
                 }, 
                 {
                  "gid":100,
-                 "height":64,
+                 "height":128,
                  "id":40,
                  "name":"astroid",
                  "properties":[
@@ -231,12 +231,12 @@
                         {
                          "name":"enemyOptions_tracker",
                          "type":"int",
-                         "value":3500
+                         "value":35000
                         }, 
                         {
                          "name":"enemyOptions_xTargetOffset",
                          "type":"int",
-                         "value":448
+                         "value":554
                         }, 
                         {
                          "name":"enemyOptions_yTargetOffset",
@@ -251,7 +251,7 @@
                         {
                          "name":"hitArea",
                          "type":"string",
-                         "value":"0,0,64,64"
+                         "value":"0,0,128,128"
                         }, 
                         {
                          "name":"speed",
@@ -276,9 +276,9 @@
                  "rotation":0,
                  "type":"enemy",
                  "visible":true,
-                 "width":64,
+                 "width":128,
                  "x":448,
-                 "y":192
+                 "y":256
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -290,7 +290,7 @@
  "nextobjectid":41,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.10.2",
+ "tiledversion":"1.11.0",
  "tileheight":64,
  "tilesets":[
         {
@@ -308,6 +308,6 @@
         }],
  "tilewidth":64,
  "type":"map",
- "version":"1.10",
+ "version":"1.11",
  "width":10
 }

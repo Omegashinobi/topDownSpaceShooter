@@ -20,7 +20,8 @@ interface iManifest {
     }
     tilemaps: string[],
     tilesprites: string[],
-    layout: string[]
+    layout: string[],
+    bitmapFont: string[]
 }
 
 let manifest: iManifest = assetManifest;
@@ -43,6 +44,7 @@ export function load(scene: BaseScene): Promise<void> {
             tilemapLoader(loader, queue);
             loadTileSprites(loader, queue);
             loadEnemyData(loader, queue);
+            loadBitmapFont(loader, scene, queue);
 
             loader.setBaseURL("/assets/sprites/");
             loader.image("default", "default.png")
@@ -90,7 +92,6 @@ export async function spriteLoader(loader: Phaser.Loader.LoaderPlugin, scene: Ba
                 for (let [key, value] of Object.entries(manifest.sprites.atlas)) {
                     let filterValue = value.split(".")[0];
                     queue.set(loadIndex(), { type: "aseprite", file: () => loader.aseprite(filterValue, `/sprites/${value.split(".")[0]}.png`, `/sprites/${value}`) });
-
                     scene.animations.push(value.split(".")[0]);
                 }
 
@@ -110,11 +111,8 @@ export async function tilemapLoader(loader: Phaser.Loader.LoaderPlugin, queue: M
     return new Promise(async (resolve, reject) => {
         try {
             for (let [key, value] of Object.entries(manifest.tilemaps)) {
-
-
                 queue.set(loadIndex(), { type: "tilemap_image", file: () => loader.image(value.split(".")[0], `/tileMaps/${value.split(".")[0]}.png`) });
                 queue.set(loadIndex(), { type: "tilemap_json", file: () => loader.tilemapTiledJSON(value.split(".")[0], `/tileMaps/${value}`) });
-
             }
             resolve();
         } catch (err: any) {
@@ -141,7 +139,6 @@ export function loadTileSprites(loader: Phaser.Loader.LoaderPlugin, queue: Map<n
     return new Promise(async (resolve, reject) => {
         for (let [key, value] of Object.entries(manifest.tilesprites)) {
             queue.set(loadIndex(), { type: "tilesprite", file: () => loader.image(`tilesprite_${value.split(".")[0]}`, `/tilesprites/${value}`) });
-
         }
         resolve();
     })
@@ -161,38 +158,61 @@ export function loadEnemyData(loader: Phaser.Loader.LoaderPlugin, queue: Map<num
     })
 }
 
+export function loadBitmapFont(loader: Phaser.Loader.LoaderPlugin, scene: BaseScene, queue: Map<number, { type: string, file: () => void }>): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            for (let [key, value] of Object.entries(manifest.bitmapFont)) {
+                const loaderKey =  value.split(".")[0];
+                queue.set(loadIndex(), { type: "bitmapFont", file: () => loader.xml(`${loaderKey}_font`, `/bitmapFont/${loaderKey}.fnt`)});
+                queue.set(loadIndex(), { type: "bitmapFont_image", file: () => loader.image(`${loaderKey}_fontImage`, `/bitmapFont/${loaderKey}.png`)});
+                scene.bitmapFonts.push(loaderKey);
+            }
+            resolve();
+        } catch (err: any) {
+            alert(err.message);
+            reject(err.message);
+        }
+    })
+}
+
+export function parseBitmapFont(scene: BaseScene) {
+    scene.bitmapFonts.forEach((e) => {
+        Phaser.GameObjects.BitmapText.ParseFromAtlas(scene, e, `${e}_fontImage`, undefined, `${e}_font`);
+    });
+}
+
 export function setupEnemyData(scene: BaseScene, value: string): Promise<void> {
     return new Promise((resolve, reject) => {
-        let i = 0;
         try {
-            const mapfile = `enemy_${value}_${i * 45}-${(i + 1) * 45}`;
-            const currentMap = scene.make.tilemap({ key: mapfile });
-
-            scene.layoutMap.push(currentMap);
-            const enemies = currentMap.objects.find((e) => { return e.name === "enemies" }).objects;
-            enemies.forEach((e) => {
-                const hitArea = e.properties.find((el: any) => el.name === "hitArea").value.split(",");
-
-                enemySpawner(e.type.toLowerCase(), {
-                    type: e.type.toLowerCase() as TMobType,
-                    name: e.name,
-                    tag: e.properties.find((el: any) => el.name === "tag").value,
-                    texture: e.properties.find((el: any) => el.name === "texture").value,
-                    speed: e.properties.find((el: any) => el.name === "speed").value,
-                    scene: scene,
-                    x: e.x,
-                    y: 0 - hitArea[3],
-                    health: e.properties.find((el: any) => el.name === "health").value,
-                    hitArea: new Phaser.Geom.Rectangle(hitArea[0], hitArea[1], hitArea[2], hitArea[3]),
-                    enemyOptions: {
-                        action: findAction(e.properties.find((el: any) => el.name === "enemyOptions_action").value),
-                        tracker: e.properties.find((el: any) => el.name === "enemyOptions_tracker").value,
-                        xTargetOffset: e.properties.find((el: any) => el.name === "enemyOptions_xTargetOffset").value,
-                        yTargetOffset: e.properties.find((el: any) => el.name === "enemyOptions_yTargetOffset").value
-                    },
-                });
+            Object.entries(manifest.layout).forEach((layout,index)=>{
+                const mapfile = `enemy_${value}_${index * 45}-${(index + 1) * 45}`;
+                const currentMap = scene.make.tilemap({ key: mapfile });
+    
+                scene.layoutMap.push(currentMap);
+                const enemies = currentMap.objects.find((e) => { return e.name === "enemies" }).objects;
+                enemies.forEach((e) => {
+                    const hitArea = e.properties.find((el: any) => el.name === "hitArea").value.split(",");
+    
+                    enemySpawner(e.type.toLowerCase(), {
+                        type: e.type.toLowerCase() as TMobType,
+                        name: e.name,
+                        tag: e.properties.find((el: any) => el.name === "tag").value,
+                        texture: e.properties.find((el: any) => el.name === "texture").value,
+                        speed: e.properties.find((el: any) => el.name === "speed").value,
+                        scene: scene,
+                        x: e.x,
+                        y: 0 - hitArea[3],
+                        health: e.properties.find((el: any) => el.name === "health").value,
+                        hitArea: new Phaser.Geom.Rectangle(hitArea[0], hitArea[1], hitArea[2], hitArea[3]),
+                        enemyOptions: {
+                            action: findAction(e.properties.find((el: any) => el.name === "enemyOptions_action").value),
+                            tracker: e.properties.find((el: any) => el.name === "enemyOptions_tracker").value*(index+1),
+                            xTargetOffset: e.properties.find((el: any) => el.name === "enemyOptions_xTargetOffset").value,
+                            yTargetOffset: e.properties.find((el: any) => el.name === "enemyOptions_yTargetOffset").value
+                        },
+                    });
+                })
             })
-            i++;
             resolve();
         }
         catch (err) {

@@ -4,7 +4,7 @@ import UIContainer from "./UIContainer";
 export default class ScoreMeter extends UI {
 
     text : Phaser.GameObjects.Sprite;
-    valueText : Phaser.GameObjects.Text;
+    valueText : Phaser.GameObjects.BitmapText;
     value : number[] = [0];
 
     constructor(instance: IUI, scene : Phaser.Scene, score : number[]) {
@@ -20,8 +20,7 @@ export default class ScoreMeter extends UI {
         super.create(uiContainer);
 
         this.text = this.scene.add.sprite(0,0,"UIText",1);
-        this.valueText = this.scene.add.text(80,0,`x ${this.value[0].toString()}`);
-        this.valueText.setFontSize(20)
+        this.valueText = this.scene.add.bitmapText(80, 0, 'comboFont', `X ${this.value[0].toString()}`);
         this.addElements([this.valueText]);        
     }
 

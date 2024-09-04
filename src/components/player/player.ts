@@ -24,10 +24,10 @@ import InputHandler from "../../util/inputHandler"
         super.create(options);
 
         this.bounds = {
-            left: 0,
-            right: 576,
+            left: 32,
+            right: 608,
             top: 0,
-            bottom: 415
+            bottom: 608
         }
 
         InputHandler.assign(this.scene);

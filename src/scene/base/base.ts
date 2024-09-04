@@ -1,6 +1,6 @@
 import Mob from "../../components/mob/mob";
 import mobList from "./base.mobs";
-import { createMap, load, loadEnemyData, loadTileSprites, setupEnemyData, spriteLoader, tilemapLoader } from "./base.loader";
+import { createMap, load, loadEnemyData, loadTileSprites, parseBitmapFont, setupEnemyData, spriteLoader, tilemapLoader } from "./base.loader";
 import UI from "../../components/UI/UI";
 import ComboMeter from "../../components/UI/comboMeter";
 import ScoreMeter from "../../components/UI/scoreMeter";
@@ -74,6 +74,7 @@ export default class BaseScene extends Phaser.Scene {
     public player: Mob;
     public setReady : ()=>void;
     public ready: Promise<void> = new Promise((resolve) => this.setReady = resolve);
+    public bitmapFonts: string[] = [];
     
 
     constructor() {
@@ -99,9 +100,11 @@ export default class BaseScene extends Phaser.Scene {
         createMap(this, "level1");
         mobList(this);
         setupEnemyData(this, "level1");
+        parseBitmapFont(this);
 
-        this.enemyTracker.create(this);
+        this.enemyTracker.create(this)
         this.physics.world.enable(this.mobs.map((e: Mob) => e.container), 0);
+        
 
         this.UIcontainer.create();
         this.UI.forEach((e) => {
@@ -109,6 +112,7 @@ export default class BaseScene extends Phaser.Scene {
         });
 
         this.player = this.findGameObjectWithTag("player");
+
     }
 
     public async update(time: number, delta: number): Promise<void> {

@@ -142,7 +142,7 @@ export const actions = {
             tween: {
                 targets: gameObject.container,
                 duration: 30000,
-                x: 0 + gameObject.instance.enemyOptions.xTargetOffset,
+                x: gameObject.instance.enemyOptions.xTargetOffset,
                 y: (1000) + gameObject.instance.enemyOptions.yTargetOffset,
                 ease: "Sine.liner",
             },

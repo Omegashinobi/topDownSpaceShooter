@@ -9,8 +9,7 @@ export interface IUI {
 
 export default class UI {
 
-    text : Phaser.GameObjects.Sprite;
-    bitmapText : Phaser.GameObjects.BitmapText;
+    text : Phaser.GameObjects.Sprite | Phaser.GameObjects.BitmapText;
     container : Phaser.GameObjects.Container;
     scene : Phaser.Scene;
     instance : IUI;
@@ -42,9 +41,6 @@ export default class UI {
     addElements(elements : any[]) {
         if(this.text) {
             this.container.add(this.text);
-        }
-        if(this.bitmapText) {
-            this.container.add(this.bitmapText);
         }
 
         elements.forEach((e)=>{

@@ -48,7 +48,7 @@ export function setupEnemyData(scene: BaseScene, value: string): Promise<void> {
                         hitArea: new Phaser.Geom.Rectangle(hitArea[0], hitArea[1], hitArea[2], hitArea[3]),
                         enemyOptions: {
                             action: findAction(e.properties.find((el: any) => el.name === "enemyOptions_action").value),
-                            tracker: calculateTrackPosition(e.y),
+                            tracker: calculateTrackPosition(e.y)*(index),
                             xTargetOffset: e.properties.find((el: any) => el.name === "enemyOptions_xTargetOffset").value,
                             yTargetOffset: e.properties.find((el: any) => el.name === "enemyOptions_yTargetOffset").value
                         },

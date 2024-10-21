@@ -1,6 +1,6 @@
 import Mob from "../../components/mob/mob";
 import mobList from "./base.mobs";
-import { createMap, load, loadEnemyData, loadTileSprites, parseBitmapFont, setupEnemyData, spriteLoader, tilemapLoader } from "./base.loader";
+import { createMap, load, loadEnemyData, loadTileSprites, parseBitmapFont, spriteLoader, tilemapLoader } from "./base.loader";
 import UI from "../../components/UI/UI";
 import ComboMeter from "../../components/UI/comboMeter";
 import ScoreMeter from "../../components/UI/scoreMeter";
@@ -9,6 +9,7 @@ import EnemyTracker from "../../components/enemy/enemyTracker";
 import parallax from "../../components/actions/parallax";
 import Player from "../../components/player/player";
 import { resolve } from "path-browserify";
+import { setupEnemyData } from "../../util/enemySpawner";
 
 export default class BaseScene extends Phaser.Scene {
 
@@ -61,8 +62,6 @@ export default class BaseScene extends Phaser.Scene {
     ];
 
     public backGroundCamera: any;
-
-    private loaders: Promise<void>[];
 
     public debug: boolean = true;
     public debugSelected: any;

@@ -69,7 +69,7 @@ export default class Mob {
 
         this.scene = options.scene;
         this.instance = options;
-        this.hitArea = options.hitArea;
+        this.hitArea = options.hitArea as Phaser.Geom.Rectangle;
 
         this.debug = {
             enabled: false,

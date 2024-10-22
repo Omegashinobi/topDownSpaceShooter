@@ -16,7 +16,7 @@ export interface IMob {
     runTime?: boolean,
     health?: number,
     killOnOutOfBounds?: boolean
-    hitArea : Phaser.Geom.Rectangle,
+    hitArea : Phaser.Geom.Rectangle | string,
     enemyOptions? : IEnemyOptions,
     movementType? : TMovementType
     target? : Mob | null;

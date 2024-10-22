@@ -11,6 +11,12 @@ import { findAction } from "../scene/base/base.actions";
 
 let manifest: iManifest = assetManifest;
 
+interface IextendedIMobOptions {
+    enemyOptions_action : string,
+    enemyOptions_xTargetOffset : number,
+    enemyOptions_yTargetOffset : number
+}
+
 function enemySpawner(enemyType : string, options: IMob) {
     const data : IMob = options;
     let mob : Mob
@@ -33,24 +39,25 @@ export function setupEnemyData(scene: BaseScene, value: string): Promise<void> {
                 scene.layoutMap.push(currentMap);
                 const enemies = currentMap.objects.find((e) => { return e.name === "enemies" }).objects;
                 enemies.forEach((e) => {
-                    const hitArea = e.properties.find((el: any) => el.name === "hitArea").value.split(",");
-    
-                    enemySpawner(e.type.toLowerCase(), {
+                    const baseClass = getBaseClass(e.properties);
+                    const hitArea : number[] = baseClass.hitArea.toString().split(",").map(e => parseInt(e));
+                    
+                    enemySpawner(baseClass.type.toLowerCase(), {
                         type: e.type.toLowerCase() as TMobType,
                         name: e.name,
-                        tag: e.properties.find((el: any) => el.name === "tag").value,
-                        texture: e.properties.find((el: any) => el.name === "texture").value,
-                        speed: e.properties.find((el: any) => el.name === "speed").value,
+                        tag: baseClass.tag,
+                        texture: baseClass.texture,
+                        speed: baseClass.speed,
                         scene: scene,
                         x: e.x,
                         y: 0 - hitArea[3],
-                        health: e.properties.find((el: any) => el.name === "health").value,
+                        health: baseClass.health,
                         hitArea: new Phaser.Geom.Rectangle(hitArea[0], hitArea[1], hitArea[2], hitArea[3]),
                         enemyOptions: {
-                            action: findAction(e.properties.find((el: any) => el.name === "enemyOptions_action").value),
+                            action: findAction(baseClass.enemyOptions_action),
                             tracker: calculateTrackPosition(e.y)*(index),
-                            xTargetOffset: e.properties.find((el: any) => el.name === "enemyOptions_xTargetOffset").value,
-                            yTargetOffset: e.properties.find((el: any) => el.name === "enemyOptions_yTargetOffset").value
+                            xTargetOffset: baseClass.enemyOptions_xTargetOffset,
+                            yTargetOffset: baseClass.enemyOptions_yTargetOffset
                         },
                     });
                 })
@@ -70,4 +77,8 @@ function calculateTrackPosition(y : number) {
     const trackerDelay = 5000 / baseGridSpace;
     
     return (baseHeight - y) * trackerDelay;
+}
+
+function getBaseClass(props : [{value:{}}]) : IMob & IextendedIMobOptions {
+    return props.find((el: any) => el.name === "baseClass").value as IMob & IextendedIMobOptions;
 }

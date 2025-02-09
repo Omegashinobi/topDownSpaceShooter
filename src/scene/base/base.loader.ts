@@ -3,7 +3,6 @@ import BaseScene from "./base";
 import * as assetManifest from "../../assets/assetManifest.json";
 import { ITileChunks, ITileLayer, ITileMap } from "../data/base.data";
 import { TMobType } from "../../components/mob/data/mob";
-import { findAction } from "./base.actions";
 import Mob from "../../components/mob/mob";
 
 interface IAnimationList {

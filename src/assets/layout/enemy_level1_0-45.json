@@ -1,25 +1,40 @@
 { "compressionlevel":-1,
  "height":10,
- "infinite":false,
+ "infinite":true,
  "layers":[
         {
-         "data":[91, 91, 91, 91, 91, 91, 91, 91, 91, 91,
-            91, 91, 91, 91, 91, 91, 91, 91, 91, 91,
-            91, 91, 91, 91, 91, 91, 91, 91, 91, 91,
-            91, 91, 91, 91, 91, 91, 91, 91, 91, 91,
-            91, 91, 91, 91, 91, 91, 91, 91, 91, 91,
-            91, 91, 91, 91, 91, 91, 91, 91, 91, 91,
-            91, 91, 91, 91, 91, 91, 91, 91, 91, 91,
-            91, 91, 91, 91, 91, 91, 91, 91, 91, 91,
-            91, 91, 91, 91, 91, 91, 91, 91, 91, 91,
-            91, 91, 91, 91, 91, 91, 91, 91, 91, 91],
-         "height":10,
+         "chunks":[
+                {
+                 "data":[91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 0, 0, 0, 0, 0, 0,
+                    91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 0, 0, 0, 0, 0, 0,
+                    91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 0, 0, 0, 0, 0, 0,
+                    91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 0, 0, 0, 0, 0, 0,
+                    91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 0, 0, 0, 0, 0, 0,
+                    91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 0, 0, 0, 0, 0, 0,
+                    91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 0, 0, 0, 0, 0, 0,
+                    91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 0, 0, 0, 0, 0, 0,
+                    91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 0, 0, 0, 0, 0, 0,
+                    91, 91, 91, 91, 91, 91, 91, 91, 91, 91, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 "height":16,
+                 "width":16,
+                 "x":0,
+                 "y":0
+                }],
+         "height":16,
          "id":1,
          "name":"background",
          "opacity":1,
+         "startx":0,
+         "starty":0,
          "type":"tilelayer",
          "visible":false,
-         "width":10,
+         "width":16,
          "x":0,
          "y":0
         }, 
@@ -40,11 +55,23 @@
                          "type":"class",
                          "value":
                             {
+                             "endFlag":89,
+                             "endPos":
+                                {
+                                 "x":640,
+                                 "y":768
+                                },
                              "enemyOptions_action":"SlowDrift",
-                             "enemyOptions_xTargetOffset":0,
-                             "enemyOptions_yTargetOffset":0,
                              "health":10,
-                             "hitArea":"0,0,128,128",
+                             "hitArea":
+                                {
+                                 "h":128,
+                                 "w":128,
+                                 "x":0,
+                                 "y":0
+                                },
+                             "spawnDelay":0,
+                             "spawnFlag":0,
                              "speed":10,
                              "tag":"enemy",
                              "texture":"astroid",
@@ -70,11 +97,22 @@
                          "type":"class",
                          "value":
                             {
+                             "endFlag":92,
+                             "endPos":
+                                {
+                                 "y":768
+                                },
                              "enemyOptions_action":"SlowDrift",
-                             "enemyOptions_xTargetOffset":0,
-                             "enemyOptions_yTargetOffset":0,
                              "health":10,
-                             "hitArea":"0,0,128,128",
+                             "hitArea":
+                                {
+                                 "h":128,
+                                 "w":128,
+                                 "x":0,
+                                 "y":0
+                                },
+                             "spawnDelay":0,
+                             "spawnFlag":0,
                              "speed":10,
                              "tag":"enemy",
                              "texture":"astroid",
@@ -100,11 +138,22 @@
                          "type":"class",
                          "value":
                             {
+                             "endFlag":93,
+                             "endPos":
+                                {
+                                 "y":768
+                                },
                              "enemyOptions_action":"SlowDrift",
-                             "enemyOptions_xTargetOffset":0,
-                             "enemyOptions_yTargetOffset":0,
                              "health":10,
-                             "hitArea":"0,0,128,128",
+                             "hitArea":
+                                {
+                                 "h":128,
+                                 "w":128,
+                                 "x":0,
+                                 "y":0
+                                },
+                             "spawnDelay":0,
+                             "spawnFlag":0,
                              "speed":10,
                              "tag":"enemy",
                              "texture":"astroid",
@@ -130,11 +179,23 @@
                          "type":"class",
                          "value":
                             {
+                             "endFlag":88,
+                             "endPos":
+                                {
+                                 "x":640,
+                                 "y":768
+                                },
                              "enemyOptions_action":"SlowDrift",
-                             "enemyOptions_xTargetOffset":0,
-                             "enemyOptions_yTargetOffset":0,
                              "health":10,
-                             "hitArea":"0,0,128,128",
+                             "hitArea":
+                                {
+                                 "h":128,
+                                 "w":128,
+                                 "x":0,
+                                 "y":0
+                                },
+                             "spawnDelay":0,
+                             "spawnFlag":0,
                              "speed":10,
                              "tag":"enemy",
                              "texture":"astroid",
@@ -160,16 +221,35 @@
                          "type":"class",
                          "value":
                             {
+                             "SpawnFlag":56,
+                             "endFlag":82,
                              "enemyOptions_action":"FromTopCenter",
-                             "enemyOptions_xTargetOffset":64,
-                             "enemyOptions_yTargetOffset":0,
+                             "enemyOptions_xTargetOffset":3,
                              "health":3,
-                             "hitArea":"0,0,64,64",
+                             "hitArea":
+                                {
+                                 "h":64,
+                                 "w":64,
+                                 "x":0,
+                                 "y":0
+                                },
+                             "spawnDelay":0,
+                             "spawnFlag":56,
                              "speed":10,
+                             "startPos":
+                                {
+                                 "x":-64,
+                                 "y":192
+                                },
                              "tag":"enemy",
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"waitOnScreen",
+                         "type":"float",
+                         "value":3
                         }],
                  "rotation":0,
                  "type":"scoutMK1",
@@ -190,16 +270,35 @@
                          "type":"class",
                          "value":
                             {
+                             "SpawnFlag":56,
+                             "endFlag":84,
                              "enemyOptions_action":"FromTopCenter",
-                             "enemyOptions_xTargetOffset":192,
-                             "enemyOptions_yTargetOffset":0,
+                             "enemyOptions_xTargetOffset":5,
                              "health":3,
-                             "hitArea":"0,0,64,64",
+                             "hitArea":
+                                {
+                                 "h":64,
+                                 "w":64,
+                                 "x":0,
+                                 "y":0
+                                },
+                             "spawnDelay":0,
+                             "spawnFlag":56,
                              "speed":10,
+                             "startPos":
+                                {
+                                 "x":-64,
+                                 "y":192
+                                },
                              "tag":"enemy",
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"waitOnScreen",
+                         "type":"float",
+                         "value":3
                         }],
                  "rotation":0,
                  "type":"scoutMK1",
@@ -220,16 +319,35 @@
                          "type":"class",
                          "value":
                             {
+                             "SpawnFlag":56,
+                             "endFlag":86,
                              "enemyOptions_action":"FromTopCenter",
-                             "enemyOptions_xTargetOffset":320,
-                             "enemyOptions_yTargetOffset":0,
+                             "enemyOptions_xTargetOffset":7,
                              "health":3,
-                             "hitArea":"0,0,64,64",
+                             "hitArea":
+                                {
+                                 "h":64,
+                                 "w":64,
+                                 "x":0,
+                                 "y":0
+                                },
+                             "spawnDelay":0,
+                             "spawnFlag":56,
                              "speed":10,
+                             "startPos":
+                                {
+                                 "x":-64,
+                                 "y":192
+                                },
                              "tag":"enemy",
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"waitOnScreen",
+                         "type":"float",
+                         "value":3
                         }],
                  "rotation":0,
                  "type":"scoutMK1",
@@ -250,11 +368,18 @@
                          "type":"class",
                          "value":
                             {
+                             "endFlag":94,
                              "enemyOptions_action":"SlowDrift",
-                             "enemyOptions_xTargetOffset":0,
-                             "enemyOptions_yTargetOffset":0,
                              "health":10,
-                             "hitArea":"0,0,128,128",
+                             "hitArea":
+                                {
+                                 "h":0,
+                                 "w":0,
+                                 "x":0,
+                                 "y":0
+                                },
+                             "spawnDelay":0,
+                             "spawnFlag":0,
                              "speed":10,
                              "tag":"enemy",
                              "texture":"astroid",
@@ -280,16 +405,35 @@
                          "type":"class",
                          "value":
                             {
+                             "SpawnFlag":57,
+                             "endFlag":83,
                              "enemyOptions_action":"FromTopCenter",
                              "enemyOptions_xTargetOffset":64,
-                             "enemyOptions_yTargetOffset":0,
                              "health":3,
-                             "hitArea":"0,0,64,64",
+                             "hitArea":
+                                {
+                                 "h":64,
+                                 "w":64,
+                                 "x":0,
+                                 "y":0
+                                },
+                             "spawnDelay":0,
+                             "spawnFlag":57,
                              "speed":10,
+                             "startPos":
+                                {
+                                 "x":640,
+                                 "y":64
+                                },
                              "tag":"enemy",
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"waitOnScreen",
+                         "type":"float",
+                         "value":3
                         }],
                  "rotation":0,
                  "type":"scoutMK1",
@@ -310,16 +454,35 @@
                          "type":"class",
                          "value":
                             {
+                             "SpawnFlag":57,
+                             "endFlag":85,
                              "enemyOptions_action":"FromTopCenter",
                              "enemyOptions_xTargetOffset":192,
-                             "enemyOptions_yTargetOffset":0,
                              "health":3,
-                             "hitArea":"0,0,64,64",
+                             "hitArea":
+                                {
+                                 "h":64,
+                                 "w":64,
+                                 "x":0,
+                                 "y":0
+                                },
+                             "spawnDelay":0,
+                             "spawnFlag":57,
                              "speed":10,
+                             "startPos":
+                                {
+                                 "x":640,
+                                 "y":64
+                                },
                              "tag":"enemy",
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"waitOnScreen",
+                         "type":"float",
+                         "value":3
                         }],
                  "rotation":0,
                  "type":"scoutMK1",
@@ -327,8 +490,7 @@
                  "width":64,
                  "x":320,
                  "y":64
-                },
-            
+                }, 
                 {
                  "gid":101,
                  "height":64,
@@ -341,16 +503,35 @@
                          "type":"class",
                          "value":
                             {
+                             "SpawnFlag":57,
+                             "endFlag":87,
                              "enemyOptions_action":"FromTopCenter",
                              "enemyOptions_xTargetOffset":320,
-                             "enemyOptions_yTargetOffset":0,
                              "health":3,
-                             "hitArea":"0,0,64,64",
+                             "hitArea":
+                                {
+                                 "h":64,
+                                 "w":64,
+                                 "x":0,
+                                 "y":0
+                                },
+                             "spawnDelay":0,
+                             "spawnFlag":57,
                              "speed":10,
+                             "startPos":
+                                {
+                                 "x":640,
+                                 "y":64
+                                },
                              "tag":"enemy",
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"waitOnScreen",
+                         "type":"float",
+                         "value":3
                         }],
                  "rotation":0,
                  "type":"scoutMK1",
@@ -364,9 +545,176 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":4,
+         "name":"flags",
+         "objects":[
+                {
+                 "gid":121,
+                 "height":64,
+                 "id":56,
+                 "name":"spawn",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":-64,
+                 "y":192
+                }, 
+                {
+                 "gid":121,
+                 "height":64,
+                 "id":57,
+                 "name":"spawn",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":640,
+                 "y":64
+                }, 
+                {
+                 "gid":122,
+                 "height":64,
+                 "id":82,
+                 "name":"end",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":128,
+                 "y":704
+                }, 
+                {
+                 "gid":122,
+                 "height":64,
+                 "id":83,
+                 "name":"end",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":192,
+                 "y":704
+                }, 
+                {
+                 "gid":122,
+                 "height":64,
+                 "id":84,
+                 "name":"end",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":256,
+                 "y":704
+                }, 
+                {
+                 "gid":122,
+                 "height":64,
+                 "id":85,
+                 "name":"end",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":320,
+                 "y":704
+                }, 
+                {
+                 "gid":122,
+                 "height":64,
+                 "id":86,
+                 "name":"end",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":384,
+                 "y":704
+                }, 
+                {
+                 "gid":122,
+                 "height":64,
+                 "id":87,
+                 "name":"end",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":448,
+                 "y":704
+                }, 
+                {
+                 "gid":122,
+                 "height":64,
+                 "id":88,
+                 "name":"end",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":512,
+                 "y":768
+                }, 
+                {
+                 "gid":122,
+                 "height":64,
+                 "id":89,
+                 "name":"end",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":704,
+                 "y":768
+                }, 
+                {
+                 "gid":122,
+                 "height":64,
+                 "id":92,
+                 "name":"end",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":128,
+                 "y":768
+                }, 
+                {
+                 "gid":122,
+                 "height":64,
+                 "id":93,
+                 "name":"end",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":0,
+                 "y":768
+                }, 
+                {
+                 "gid":122,
+                 "height":64,
+                 "id":94,
+                 "name":"end",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":-128,
+                 "y":768
+                }],
+         "opacity":0.9,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":4,
- "nextobjectid":56,
+ "nextlayerid":6,
+ "nextobjectid":95,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

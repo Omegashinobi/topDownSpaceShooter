@@ -1,6 +1,7 @@
-import Phaser, { Scale, Scene } from "phaser";
+import Phaser, { Game, Renderer, Scale, Scene } from "phaser";
 import BaseScene from "./scene/base/base";
 import Level1 from "./scene/level1";
+import { initDevtools } from '@pixi/devtools';
 
 let scenes = [
     new Level1()
@@ -12,6 +13,7 @@ export const MIN_SIZE_WIDTH_SCREEN = window.innerWidth;
 export const MIN_SIZE_HEIGHT_SCREEN = window.innerHeight;
 export const SIZE_WIDTH_SCREEN = 640;
 export const SIZE_HEIGHT_SCREEN = 640;
+export const DEBUG = true;
 
 let parentContainer = document.getElementsByTagName("body").item(0);
 parentContainer.style.backgroundColor = "black";
@@ -31,7 +33,7 @@ const config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: true
+            debug: DEBUG
         }
     },
     input: {
@@ -39,6 +41,8 @@ const config = {
     },
     pixelArt: true
 }
+
+// @ts-ignore
 
 export const app = new Phaser.Game(config);
 

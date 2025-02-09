@@ -1,7 +1,6 @@
 import { Scene } from "phaser";
 import Player from "../../components/player/player";
 import BaseScene from "./base";
-import { actions } from "./base.actions";
 import Mob from "../../components/mob/mob";
 import { MAX_SIZE_HEIGHT_SCREEN, MAX_SIZE_WIDTH_SCREEN } from "../../app";
 import Enemy from "../../components/enemy/enemy";

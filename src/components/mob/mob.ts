@@ -1,7 +1,7 @@
 import BaseScene from "../../scene/base/base";
 import { TMobType, IDebugOptions, IEnemyOptions, IMob, TMovementType } from "./data/mob";
 
-interface Constructor<Type extends Mob> {
+export interface Constructor<Type extends Mob> {
     new(): Type;
 }
 

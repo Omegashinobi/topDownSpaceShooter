@@ -1,20 +1,15 @@
 import { IMob } from "../mob/data/mob";
-import Mob from "../mob/mob";
+import Mob, { Constructor } from "../mob/mob";
 import EnemyProjectile from "../projectile/enemyProjectile";
 
 export default class Enemy extends Mob {
-    public movementActive: boolean = true;
-    public movementPattern: any[] = [];
-
     protected fireRate: number;
     protected maxFireRate: number = this.setRand(2000, 1000);
-
+    public movementActive: boolean = true;
+    public movementPattern: any[] = [];
     public canFire : boolean = false;
-
     public trackerActive: number;
-
     public player : Mob;
-
     public spawnProtect = 2000;
 
     collisionList: string[];
@@ -44,10 +39,6 @@ export default class Enemy extends Mob {
         this.fireRate = this.maxFireRate;
         super.create(options);
         this.player = this.scene.findGameObjectWithTag("player");
-
-        if(options.enemyOptions.action) {
-            this.setUpActions(options.enemyOptions.action(this));
-        }
 
         if(options.enemyOptions.tracker) {
             this.trackerActive = options.enemyOptions.tracker;
@@ -79,7 +70,7 @@ export default class Enemy extends Mob {
         }
     }
 
-    public setUpActions(action : Phaser.Types.Time.TimelineEvent) {
+    public setUpActions(action : Phaser.Types.Time.TimelineEventConfig[]) {
         this.actions = this.scene.add.timeline(action);
         this.enemyEvents();
     }
@@ -89,18 +80,18 @@ export default class Enemy extends Mob {
             EnemyProjectile.spawn({
                 type : "projectile",
                 name: "scoutBlast",
-                texture: "scoutBlast",
+                texture: "enemyBlast",
                 tag: "enemyProjectile",
                 health:1,
                 scene: this.scene,
-                speed: -10,
+                speed: -50,
                 x: this.sprite.x,
                 y: this.sprite.y - 20,
                 runTime: true,
                 hitArea: new Phaser.Geom.Rectangle(-16, -16, 32, 32),
                 movementType : "normal",
             },EnemyProjectile)
-            this.maxFireRate = this.setRand(2000, 1000);
+            this.maxFireRate = this.setRand(3000, 1000);
             this.fireRate = this.maxFireRate;
         }
     }

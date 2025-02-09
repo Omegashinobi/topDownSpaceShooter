@@ -29,6 +29,7 @@
     "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
+    "@pixi/devtools": "^2.0.1",
     "path-browserify": "^1.0.1",
     "phaser": "^3.70.0"
   }

@@ -5,7 +5,7 @@ export type TMobType = "player" | "enemy" | "projectile";
 export type TMovementType = "normal" | "rotationBased";
 
 export interface IMob {
-    type : TMobType,
+    type: TMobType,
     name: string,
     tag?: string
     texture: string,
@@ -16,10 +16,10 @@ export interface IMob {
     runTime?: boolean,
     health?: number,
     killOnOutOfBounds?: boolean
-    hitArea : Phaser.Geom.Rectangle | string,
-    enemyOptions? : IEnemyOptions,
-    movementType? : TMovementType
-    target? : Mob | null;
+    hitArea: Phaser.Geom.Rectangle | string,
+    enemyOptions?: IEnemyOptions,
+    movementType?: TMovementType
+    target?: Mob | null;
 }
 
 export interface IDebugOptions {
@@ -27,12 +27,30 @@ export interface IDebugOptions {
 }
 
 export interface IEnemyOptions {
-    action : any,
     tracker: number,
-    xTargetOffset? : number,
-    yTargetOffset? : number
+    startPosition: Position | null,
+    waitPosition: Position | null,
+    endPosition: Position | null,
 }
 
 export interface IBossOptions {
-    parts : IMob[]
+    parts: IMob[]
+}
+
+export interface ISwarmerData {
+    paths :  {x:number,y:number}[],
+    index : number,
+    spawnDelay : number
+}
+
+export type Position = {
+    x: number,
+    y: number
+}
+
+export type FlagData = {
+    flags: [{
+        start: Position
+        end: Position
+    }]
 }

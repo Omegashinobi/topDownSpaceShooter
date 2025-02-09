@@ -91,6 +91,7 @@ import InputHandler from "../../util/inputHandler"
                     x: this.instance.x,
                     y: this.instance.y - 40,
                     runTime: true,
+                    tag: "playerProjectile",
                     hitArea: new Phaser.Geom.Rectangle(0, 0, 32, 32)
                 }, PlayerProjectile)
             }

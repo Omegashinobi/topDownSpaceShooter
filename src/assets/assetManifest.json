@@ -44,7 +44,12 @@
     ],
     "layout" : [
         "enemy_level1_0-45.json",
-        "enemy_level1_45-90.json"
+        "enemy_level1_45-90.json",
+        "enemy_level1_90-135.json",
+        "enemy_level1_135-180.json",
+        "enemy_level1_180-225.json",
+        "enemy_level1_225-270.json",
+        "enemy_level1_270-315.json"
     ],
     "bitmapFont": [
         "comboFont.fnt"

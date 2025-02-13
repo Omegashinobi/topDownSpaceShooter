@@ -267,6 +267,11 @@
                             }
                         }, 
                         {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":50
+                        }, 
+                        {
                          "name":"waitOnScreen",
                          "type":"float",
                          "value":3
@@ -314,6 +319,11 @@
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":51
                         }, 
                         {
                          "name":"waitOnScreen",
@@ -365,6 +375,11 @@
                             }
                         }, 
                         {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":52
+                        }, 
+                        {
                          "name":"waitOnScreen",
                          "type":"float",
                          "value":3
@@ -412,6 +427,11 @@
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":60
                         }, 
                         {
                          "name":"waitOnScreen",
@@ -463,6 +483,11 @@
                             }
                         }, 
                         {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":61
+                        }, 
+                        {
                          "name":"waitOnScreen",
                          "type":"float",
                          "value":3
@@ -510,6 +535,11 @@
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":62
                         }, 
                         {
                          "name":"waitOnScreen",
@@ -561,6 +591,11 @@
                             }
                         }, 
                         {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":53
+                        }, 
+                        {
                          "name":"waitOnScreen",
                          "type":"float",
                          "value":3
@@ -608,6 +643,11 @@
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":54
                         }, 
                         {
                          "name":"waitOnScreen",
@@ -659,6 +699,11 @@
                             }
                         }, 
                         {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":55
+                        }, 
+                        {
                          "name":"waitOnScreen",
                          "type":"float",
                          "value":3
@@ -706,6 +751,11 @@
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":55
                         }, 
                         {
                          "name":"waitOnScreen",
@@ -758,6 +808,11 @@
                             }
                         }, 
                         {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":58
+                        }, 
+                        {
                          "name":"waitOnScreen",
                          "type":"float",
                          "value":3
@@ -807,6 +862,11 @@
                             }
                         }, 
                         {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":57
+                        }, 
+                        {
                          "name":"waitOnScreen",
                          "type":"float",
                          "value":3
@@ -847,6 +907,11 @@
                              "texture":"guardian",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":0
                         }],
                  "rotation":0,
                  "type":"guardian",
@@ -884,6 +949,11 @@
                              "texture":"guardian",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":0
                         }],
                  "rotation":0,
                  "type":"guardian",
@@ -921,6 +991,11 @@
                              "texture":"guardian",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":0
                         }],
                  "rotation":0,
                  "type":"guardian",
@@ -1119,6 +1194,139 @@
                  "width":64,
                  "x":640,
                  "y":448
+                }, 
+                {
+                 "gid":31,
+                 "height":64,
+                 "id":50,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":0,
+                 "y":192
+                },
+            
+                {
+                 "gid":31,
+                 "height":64,
+                 "id":51,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":96,
+                 "y":192
+                }, 
+                {
+                 "gid":31,
+                 "height":64,
+                 "id":52,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":192,
+                 "y":192
+                }, 
+                {
+                 "gid":31,
+                 "height":64,
+                 "id":53,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":0,
+                 "y":128
+                }, 
+                {
+                 "gid":31,
+                 "height":64,
+                 "id":54,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":96,
+                 "y":128
+                }, 
+                {
+                 "gid":31,
+                 "height":64,
+                 "id":55,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":192,
+                 "y":128
+                }, 
+                {
+                 "gid":31,
+                 "height":64,
+                 "id":57,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":384,
+                 "y":128
+                }, 
+                {
+                 "gid":31,
+                 "height":64,
+                 "id":58,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":288,
+                 "y":128
+                }, 
+                {
+                 "gid":31,
+                 "height":64,
+                 "id":60,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":384,
+                 "y":256
+                }, 
+                {
+                 "gid":31,
+                 "height":64,
+                 "id":61,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":480,
+                 "y":256
+                }, 
+                {
+                 "gid":31,
+                 "height":64,
+                 "id":62,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":576,
+                 "y":256
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1138,7 +1346,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":50,
+ "nextobjectid":64,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

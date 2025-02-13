@@ -247,6 +247,11 @@
                             }
                         }, 
                         {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":95
+                        }, 
+                        {
                          "name":"waitOnScreen",
                          "type":"float",
                          "value":3
@@ -296,6 +301,11 @@
                             }
                         }, 
                         {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":96
+                        }, 
+                        {
                          "name":"waitOnScreen",
                          "type":"float",
                          "value":3
@@ -343,6 +353,11 @@
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":97
                         }, 
                         {
                          "name":"waitOnScreen",
@@ -431,6 +446,11 @@
                             }
                         }, 
                         {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":98
+                        }, 
+                        {
                          "name":"waitOnScreen",
                          "type":"float",
                          "value":3
@@ -480,6 +500,11 @@
                             }
                         }, 
                         {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":99
+                        }, 
+                        {
                          "name":"waitOnScreen",
                          "type":"float",
                          "value":3
@@ -527,6 +552,11 @@
                              "texture":"scout",
                              "type":"enemy"
                             }
+                        }, 
+                        {
+                         "name":"holdLocation",
+                         "type":"object",
+                         "value":100
                         }, 
                         {
                          "name":"waitOnScreen",
@@ -706,6 +736,79 @@
                  "width":64,
                  "x":-128,
                  "y":768
+                }, 
+                {
+                 "gid":131,
+                 "height":64,
+                 "id":95,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":128,
+                 "y":192
+                }, 
+                {
+                 "gid":131,
+                 "height":64,
+                 "id":96,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":256,
+                 "y":192
+                }, 
+                {
+                 "gid":131,
+                 "height":64,
+                 "id":97,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":384,
+                 "y":192
+                },
+            
+                {
+                 "gid":131,
+                 "height":64,
+                 "id":98,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":192,
+                 "y":192
+                }, 
+                {
+                 "gid":131,
+                 "height":64,
+                 "id":99,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":320,
+                 "y":192
+                }, 
+                {
+                 "gid":131,
+                 "height":64,
+                 "id":100,
+                 "name":"hold",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":448,
+                 "y":192
                 }],
          "opacity":0.9,
          "type":"objectgroup",
@@ -714,7 +817,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":95,
+ "nextobjectid":101,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.0",

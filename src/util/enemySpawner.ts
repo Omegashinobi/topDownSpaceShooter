@@ -21,6 +21,13 @@ interface IextendedIMobOptions {
     endFlag: number,
     spawnDelay: number,
 }
+interface ISpawnData {
+    scene: BaseScene,
+    hitArea: number[],
+    trackPosition: number,
+    flagData: Phaser.Types.Tilemaps.TiledObject[],
+    holdLocation?: Position
+}
 
 function enemySpawner(enemyType: string, options: IMob): Enemy {
     const data: IMob = options;
@@ -52,19 +59,20 @@ export function setupEnemyData(scene: BaseScene, value: string): Promise<void> {
                     const baseClass = getBaseClass(e.properties);
                     const hitArea: number[] = baseClass.hitArea.toString().split(",").map(e => parseInt(e));
                     const trackPosition = calculateTrackPosition(e.y) * (index + 1);
-                    const pathRef = e.properties.find((el: Phaser.Types.Tilemaps.TiledObject)=>{return el.name === "path"})?.value;
+                    const pathRef = e.properties.find((el: Phaser.Types.Tilemaps.TiledObject) => { return el.name === "path" })?.value;
+                    const holdLocation: Position | undefined = checkForHoldPositionData(e,flagData);
 
                     if (e.type.toLowerCase() === "swarmer") {
-                        for(let i = 0; i < e.properties.find((e : Phaser.Types.Tilemaps.TiledObject)=>{return e.name === "amount"}).value; i++) {
-                            const mob = spawn(baseClass, e, scene, hitArea, trackPosition, flagData);                            
+                        for (let i = 0; i < e.properties.find((e: Phaser.Types.Tilemaps.TiledObject) => { return e.name === "amount" }).value; i++) {
+                            const mob = spawn(baseClass, e, { scene, hitArea, trackPosition, flagData } as ISpawnData);
                             mob.setUpActions(getEnemyActionSet(mob, trackPosition, {
-                                paths: pathData.find((el)=>{return el.id === pathRef}).polyline as {x:number,y:number}[],
+                                paths: pathData.find((el) => { return el.id === pathRef }).polyline as { x: number, y: number }[],
                                 index: i,
-                                spawnDelay: e.properties.find((el: Phaser.Types.Tilemaps.TiledObject)=>{return el.name === "spawnDelay"}).value
+                                spawnDelay: e.properties.find((el: Phaser.Types.Tilemaps.TiledObject) => { return el.name === "spawnDelay" }).value
                             }));
                         }
                     } else {
-                        const mob = spawn(baseClass, e, scene, hitArea, trackPosition, flagData);
+                        const mob = spawn(baseClass, e, { scene, hitArea, trackPosition, flagData, holdLocation } as ISpawnData);
                         mob.setUpActions(getEnemyActionSet(mob, trackPosition));
                     }
                 })
@@ -80,11 +88,10 @@ export function setupEnemyData(scene: BaseScene, value: string): Promise<void> {
 
 function spawn(baseClass: IMob & IextendedIMobOptions,
     e: Phaser.Types.Tilemaps.TiledObject,
-    scene: BaseScene,
-    hitArea: number[],
-    trackPosition: number,
-    flagData : Phaser.Types.Tilemaps.TiledObject[]
+    spawnData: ISpawnData
 ) {
+    const { scene, hitArea, trackPosition, flagData, holdLocation } = spawnData;
+
     return enemySpawner(baseClass.type.toLowerCase(), {
         type: e.type.toLowerCase() as TMobType,
         name: e.name,
@@ -99,7 +106,7 @@ function spawn(baseClass: IMob & IextendedIMobOptions,
         enemyOptions: {
             tracker: trackPosition / 100,
             startPosition: baseClass.spawnFlag === 0 || undefined ? undefined : { x: flagData.find(e => e.id === baseClass.spawnFlag).x, y: flagData.find(e => e.id === baseClass.spawnFlag).y },
-            waitPosition: { x: e.x, y: e.y } as Position,
+            waitPosition: holdLocation !== undefined ? { x: holdLocation.x, y: holdLocation.y } as Position : { x: e.x, y: e.y } as Position,
             endPosition: baseClass.endFlag === 0 || undefined ? undefined : { x: flagData.find(e => e.id === baseClass.endFlag).x, y: flagData.find(e => e.id === baseClass.endFlag).y }
         },
     });
@@ -139,6 +146,21 @@ function getEnemyActionSet(mob: Mob, trackPosition: number, swarmerData?: ISwarm
     }
 
     return action;
+}
+
+function checkForHoldPositionData(e: Phaser.Types.Tilemaps.TiledObject, flagData: Phaser.Types.Tilemaps.TiledObject[]): Position {
+    const prop = e.properties.find((e: Phaser.Types.Tilemaps.TiledObject) => e.name === "holdLocation")?.value || undefined;
+
+    if (prop === undefined) {
+        return undefined;
+    }
+
+    const data = flagData.find((el)=>{return el.id === prop});
+
+    return {
+        x: data.x,
+        y: data.y
+    };
 }
 
 function getBaseClass(props: [{ value: {} }]): IMob & IextendedIMobOptions {

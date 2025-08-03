@@ -43,13 +43,12 @@
         "stars_3.png"
     ],
     "layout" : [
-        "enemy_level1_0-45.json",
-        "enemy_level1_45-90.json",
-        "enemy_level1_90-135.json",
-        "enemy_level1_135-180.json",
-        "enemy_level1_180-225.json",
-        "enemy_level1_225-270.json",
-        "enemy_level1_270-315.json"
+        "enemy_level1_0-45.json"
+    ],
+    "enemyGroups": [
+        "enemy_level1_0-45_group_a.json",
+        "enemy_level1_0-45_group_b.json",
+        "enemy_level1_0-45_group_c.json"
     ],
     "bitmapFont": [
         "comboFont.fnt"

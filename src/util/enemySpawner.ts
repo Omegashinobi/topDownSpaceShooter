@@ -4,17 +4,15 @@ import Turret from "../components/enemy/turret";
 import { IMob, TMobType, Position, ISwarmerData } from "../components/mob/data/mob";
 import Mob from "../components/mob/mob";
 import * as assetManifest from "../assets/assetManifest.json";
-import { iManifest } from "../scene/base/base.loader";
 import BaseScene from "../scene/base/base";
 
 import { action as astroidAction } from "../components/enemy/tweens/astroid";
 import { action as scoutMK1Action } from "../components/enemy/tweens/scoutMK1";
 import { action as turretAction } from "../components/enemy/tweens/turret";
 import { action as swarmerAction } from "../components/enemy/tweens/swarmers";
-import { Scene } from "phaser";
+import { IManifest } from "../data/manifest";
 
-
-let manifest: iManifest = assetManifest;
+let manifest: IManifest = assetManifest;
 
 interface IextendedIMobOptions {
     spawnFlag: number,

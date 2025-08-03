@@ -6,10 +6,8 @@ import ComboMeter from "../../components/UI/comboMeter";
 import ScoreMeter from "../../components/UI/scoreMeter";
 import UIContainer from "../../components/UI/UIContainer";
 import EnemyTracker from "../../components/enemy/enemyTracker";
-import parallax from "../../components/actions/parallax";
-import Player from "../../components/player/player";
-import { resolve } from "path-browserify";
 import { setupEnemyData } from "../../util/enemySpawner";
+import LevelManager from "../../util/levelManager";
 
 export default class BaseScene extends Phaser.Scene {
 
@@ -69,6 +67,8 @@ export default class BaseScene extends Phaser.Scene {
     public map: Phaser.Tilemaps.Tilemap;
     public layoutMap: Phaser.Tilemaps.Tilemap[] = [];
 
+    public levelManager: LevelManager;
+
     public background: Phaser.GameObjects.TileSprite[] = [];
     public player: Mob;
     public setReady : ()=>void;
@@ -95,10 +95,10 @@ export default class BaseScene extends Phaser.Scene {
 
         this.background[1].tilePositionX += 32;
         this.background[2].tilePositionX -= 32;
+        
+        this.levelManager = new LevelManager("level1", this);
 
-        createMap(this, "level1");
         mobList(this);
-        setupEnemyData(this, "level1");
         parseBitmapFont(this);
 
         this.enemyTracker.create(this)

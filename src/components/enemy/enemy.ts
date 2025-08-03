@@ -12,19 +12,12 @@ export default class Enemy extends Mob {
     public player : Mob;
     public spawnProtect = 2000;
 
-    collisionList: string[];
-
-    constructor() {
-        super();
-
-        this.onSetActive = () => {
-            this.sprite.setVisible(true);
-        };
-
-        this.onSetActive = () => {
-            this.sprite.setVisible(false);
-        };
+    public override set active(value : boolean) {
+        this.sprite.setVisible(value);
+        this._active = true;
     }
+
+    collisionList: string[];
 
     public create(options: IMob) : void {
         this.score = 100;
@@ -40,17 +33,12 @@ export default class Enemy extends Mob {
         super.create(options);
         this.player = this.scene.findGameObjectWithTag("player");
 
-        if(options.enemyOptions.tracker) {
-            this.trackerActive = options.enemyOptions.tracker;
-        }
-
         this.canDamage = false;
     }
 
     public update(time: number, delta: number): void {
         super.update(time, delta);
-        if ((this.scene.timer > this.trackerActive) && this._active) {
-
+        if (this._active) {
             this.spawnProtect -= delta;
 
             if(this.spawnProtect <= 0) {

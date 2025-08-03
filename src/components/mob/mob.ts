@@ -31,10 +31,7 @@ export default class Mob {
 
     public set active(value: boolean) {
         this._active = value;
-        value ? this.onSetActive : this.onSetDeactive;
     }
-    protected onSetActive: () => void;
-    protected onSetDeactive: () => void;
 
     movementSpeed = 0;
     speed: number;

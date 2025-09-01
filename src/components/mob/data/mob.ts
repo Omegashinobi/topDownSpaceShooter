@@ -27,10 +27,8 @@ export interface IDebugOptions {
 }
 
 export interface IEnemyOptions {
-    tracker: number,
-    startPosition: Position | null,
-    waitPosition: Position | null,
-    endPosition: Position | null,
+    tracker: number
+    actions: Phaser.Types.Time.TimelineEventConfig[]
 }
 
 export interface IBossOptions {
@@ -53,4 +51,13 @@ export type FlagData = {
         start: Position
         end: Position
     }]
+}
+
+export type MobPathData = {
+    at: number
+    delay: number
+    duration: number
+    ease: string
+    event: string
+    target: string
 }

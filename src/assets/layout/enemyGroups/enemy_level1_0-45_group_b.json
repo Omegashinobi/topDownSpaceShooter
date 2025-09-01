@@ -11,7 +11,7 @@
                  "gid":1,
                  "height":64,
                  "id":1,
-                 "name":"scoutMK1",
+                 "name":"scoutMK1_1",
                  "properties":[
                         {
                          "name":"baseClass",
@@ -27,8 +27,12 @@
                              "hitArea":
                                 {
                                  "h":64,
-                                 "w":64
+                                 "w":64,
+                                 "x":0,
+                                 "y":0
                                 },
+                             "path_data":8,
+                             "spawnDelay":0,
                              "spawnFlag":4,
                              "speed":10,
                              "startPos":
@@ -36,14 +40,52 @@
                                  "x":640,
                                  "y":64
                                 },
+                             "tag":"enemy",
                              "texture":"scout",
                              "type":"enemy"
                             }
                         }, 
                         {
-                         "name":"holdLocation",
-                         "type":"object",
-                         "value":5
+                         "name":"path_data_0",
+                         "propertytype":"Tween",
+                         "type":"class",
+                         "value":
+                            {
+                             "at":0,
+                             "delay":"0",
+                             "duration":0,
+                             "ease":"Sine.easeInOut",
+                             "event":"",
+                             "target":""
+                            }
+                        }, 
+                        {
+                         "name":"path_data_1",
+                         "propertytype":"Tween",
+                         "type":"class",
+                         "value":
+                            {
+                             "at":0,
+                             "delay":"0",
+                             "duration":0,
+                             "ease":"Sine.easeInOut",
+                             "event":"",
+                             "target":""
+                            }
+                        }, 
+                        {
+                         "name":"path_data_2",
+                         "propertytype":"Tween",
+                         "type":"class",
+                         "value":
+                            {
+                             "at":0,
+                             "delay":"0",
+                             "duration":0,
+                             "ease":"Sine.easeInOut",
+                             "event":"DEACTIVE",
+                             "target":""
+                            }
                         }],
                  "rotation":0,
                  "type":"scoutMK1",
@@ -56,7 +98,7 @@
                  "gid":1,
                  "height":64,
                  "id":2,
-                 "name":"scoutMK1",
+                 "name":"scoutMK1_2",
                  "properties":[
                         {
                          "name":"baseClass",
@@ -72,8 +114,12 @@
                              "hitArea":
                                 {
                                  "h":64,
-                                 "w":64
+                                 "w":64,
+                                 "x":0,
+                                 "y":0
                                 },
+                             "path_data":9,
+                             "spawnDelay":0,
                              "spawnFlag":4,
                              "speed":10,
                              "startPos":
@@ -81,14 +127,52 @@
                                  "x":640,
                                  "y":64
                                 },
+                             "tag":"enemy",
                              "texture":"scout",
                              "type":"enemy"
                             }
                         }, 
                         {
-                         "name":"holdLocation",
-                         "type":"object",
-                         "value":6
+                         "name":"path_data_0",
+                         "propertytype":"Tween",
+                         "type":"class",
+                         "value":
+                            {
+                             "at":0,
+                             "delay":"0",
+                             "duration":0,
+                             "ease":"Sine.easeInOut",
+                             "event":"",
+                             "target":""
+                            }
+                        }, 
+                        {
+                         "name":"path_data_1",
+                         "propertytype":"Tween",
+                         "type":"class",
+                         "value":
+                            {
+                             "at":0,
+                             "delay":"0",
+                             "duration":0,
+                             "ease":"Sine.easeInOut",
+                             "event":"",
+                             "target":""
+                            }
+                        }, 
+                        {
+                         "name":"path_data_2",
+                         "propertytype":"Tween",
+                         "type":"class",
+                         "value":
+                            {
+                             "at":0,
+                             "delay":"0",
+                             "duration":0,
+                             "ease":"Sine.easeInOut",
+                             "event":"DEACTIVE",
+                             "target":""
+                            }
                         }],
                  "rotation":0,
                  "type":"scoutMK1",
@@ -101,7 +185,7 @@
                  "gid":1,
                  "height":64,
                  "id":3,
-                 "name":"scoutMK1",
+                 "name":"scoutMK1_3",
                  "properties":[
                         {
                          "name":"baseClass",
@@ -117,8 +201,12 @@
                              "hitArea":
                                 {
                                  "h":64,
-                                 "w":64
+                                 "w":64,
+                                 "x":0,
+                                 "y":0
                                 },
+                             "path_data":8,
+                             "spawnDelay":0,
                              "spawnFlag":4,
                              "speed":10,
                              "startPos":
@@ -126,14 +214,52 @@
                                  "x":640,
                                  "y":64
                                 },
+                             "tag":"enemy",
                              "texture":"scout",
                              "type":"enemy"
                             }
                         }, 
                         {
-                         "name":"holdLocation",
-                         "type":"object",
-                         "value":7
+                         "name":"path_data_0",
+                         "propertytype":"Tween",
+                         "type":"class",
+                         "value":
+                            {
+                             "at":0,
+                             "delay":"0",
+                             "duration":0,
+                             "ease":"Sine.easeInOut",
+                             "event":"",
+                             "target":""
+                            }
+                        }, 
+                        {
+                         "name":"path_data_1",
+                         "propertytype":"Tween",
+                         "type":"class",
+                         "value":
+                            {
+                             "at":0,
+                             "delay":"0",
+                             "duration":0,
+                             "ease":"Sine.easeInOut",
+                             "event":"",
+                             "target":""
+                            }
+                        }, 
+                        {
+                         "name":"path_data_2",
+                         "propertytype":"Tween",
+                         "type":"class",
+                         "value":
+                            {
+                             "at":0,
+                             "delay":"0",
+                             "duration":0,
+                             "ease":"Sine.easeInOut",
+                             "event":"DEACTIVE",
+                             "target":""
+                            }
                         }],
                  "rotation":0,
                  "type":"scoutMK1",
@@ -150,56 +276,80 @@
         }, 
         {
          "draworder":"topdown",
-         "id":3,
-         "name":"flags",
+         "id":4,
+         "name":"paths",
          "objects":[
                 {
-                 "gid":21,
-                 "height":64,
-                 "id":4,
-                 "name":"start",
+                 "height":0,
+                 "id":8,
+                 "name":"scoutMK1_3",
+                 "polyline":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":-448,
+                         "y":0
+                        }, 
+                        {
+                         "x":-448,
+                         "y":640
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":64,
+                 "width":0,
                  "x":640,
-                 "y":64
+                 "y":0
                 }, 
                 {
-                 "gid":22,
-                 "height":64,
-                 "id":5,
-                 "name":"end",
+                 "height":0,
+                 "id":9,
+                 "name":"scoutMK1_2",
+                 "polyline":[
+                        {
+                         "x":-128,
+                         "y":0
+                        }, 
+                        {
+                         "x":-448,
+                         "y":0
+                        }, 
+                        {
+                         "x":-448,
+                         "y":640
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":64,
-                 "x":192,
-                 "y":704
+                 "width":0,
+                 "x":768,
+                 "y":0
                 }, 
                 {
-                 "gid":22,
-                 "height":64,
-                 "id":6,
-                 "name":"end",
+                 "height":0,
+                 "id":10,
+                 "name":"scoutMK1_1",
+                 "polyline":[
+                        {
+                         "x":-256,
+                         "y":0
+                        }, 
+                        {
+                         "x":-448,
+                         "y":0
+                        }, 
+                        {
+                         "x":-448,
+                         "y":640
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":64,
-                 "x":320,
-                 "y":704
-                }, 
-                {
-                 "gid":22,
-                 "height":64,
-                 "id":7,
-                 "name":"end",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":448,
-                 "y":704
+                 "width":0,
+                 "x":896,
+                 "y":0
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -207,16 +357,25 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":4,
- "nextobjectid":8,
+ "nextlayerid":5,
+ "nextobjectid":11,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
  "tileheight":64,
  "tilesets":[
         {
+         "columns":10,
          "firstgid":1,
-         "source":"G:\/My Drive\/GAMES_DEVELOPMENT\/Project TopDownSpaceShooter\/projectFiles\/tilemaps\/tilemapIcons.tsx"
+         "image":"G:\/My Drive\/GAMES_DEVELOPMENT\/Project TopDownSpaceShooter\/projectFiles\/tilemapIcons.png",
+         "imageheight":640,
+         "imagewidth":640,
+         "margin":0,
+         "name":"tilemapIcons",
+         "spacing":0,
+         "tilecount":100,
+         "tileheight":64,
+         "tilewidth":64
         }],
  "tilewidth":64,
  "type":"map",

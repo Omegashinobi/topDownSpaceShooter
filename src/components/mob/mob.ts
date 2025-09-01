@@ -19,7 +19,7 @@ export default class Mob {
     protected scene: BaseScene;
     protected actions: any;
     protected actionsPlaying: boolean = false;
-    protected _active: boolean = true;
+    protected _active: boolean = false;
     public container: Phaser.Physics.Arcade.Sprite;
     public instance: IMob;
     public canDamage: boolean = true;
@@ -31,6 +31,7 @@ export default class Mob {
 
     public set active(value: boolean) {
         this._active = value;
+        this.sprite.visible = value;
     }
 
     movementSpeed = 0;
@@ -75,7 +76,8 @@ export default class Mob {
         this.container = this.scene.physics.add.sprite(this.instance.x, this.instance.y, this.instance.texture);
         this.container.setVisible(false);
         this.sprite = new Phaser.GameObjects.Sprite(this.scene,0,0,this.instance.texture);
-        this.sprite.addToDisplayList()
+        this.sprite.addToDisplayList();
+        this.sprite.visible = this._active;
 
         this.scene.anims.createFromAseprite(this.instance.texture,undefined,this.sprite);
 

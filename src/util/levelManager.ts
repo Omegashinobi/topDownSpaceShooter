@@ -3,6 +3,9 @@ import * as assetManifest from "../assets/assetManifest.json";
 import { IManifest, IProperty } from "../data/manifest";
 import { createMap } from "../scene/base/base.loader";
 import BaseScene from "../scene/base/base";
+import { setupEnemyData } from "./enemySpawner";
+import EnemyGroup from "../components/enemy/enemyGroup";
+import { Position } from "../components/mob/data/mob";
 
 export default class LevelManager {
 
@@ -11,20 +14,22 @@ export default class LevelManager {
     private _enemyGroupData: string[] = [];
     private _scene: BaseScene;
 
+    private _currentChunk: string;
+
     private _manifest: IManifest = assetManifest;
 
-    constructor(id: string, scene : BaseScene) {
+    constructor(id: string, scene: BaseScene) {
         this._levelID = id;
         this._scene = scene;
 
-        createMap(scene,id);
+        createMap(scene, id);
 
         [
             { manifestIndex: this._manifest.layout, store: this._levelChunkData },
             { manifestIndex: this._manifest.enemyGroups, store: this._enemyGroupData }
         ].forEach((indexerElement) => {
             indexerElement.manifestIndex.forEach((e: string) => {
-                if(e.split("_")[1] === this._levelID) {
+                if (e.split("_")[1] === this._levelID) {
                     indexerElement.store.push(e);
                 };
             });
@@ -34,26 +39,30 @@ export default class LevelManager {
     }
 
     private _parseLevelChunkData() {
-        this._levelChunkData.forEach((key)=>{ 
+        this._levelChunkData.forEach((key) => {
             const currentMap = this._scene.make.tilemap({ key: key.split(".")[0] });
-            
-            const spawners = currentMap.getObjectLayer("flags").objects.map((e: Phaser.Types.Tilemaps.TiledObject)=>{
-                if(e.type === "spawner") {
-                    return e.properties;
+
+            this._currentChunk = key;
+
+            const spawners = currentMap.getObjectLayer("flags").objects.map((e: Phaser.Types.Tilemaps.TiledObject) => {
+                if (e.type === "spawner") {
+                    return { props: e.properties, x: e.x, y: e.y };
                 }
             });
-            
-            spawners.forEach((e : IProperty[])=>this._spawnEnemies(e));
+
+            spawners.forEach((e) => this._spawnEnemies(e.props, {x:e.x, y:e.y}));
         });
     }
 
-    private _spawnEnemies(spawner : IProperty[]) {
-        const groupData = spawner.find((e)=>e.name === "enemyGroup");
-        const enemyGroup = this._parseEnemyGroupData(groupData.value);
-    }
+    private _spawnEnemies(spawner: IProperty[], position: Position) {
+        const groupData = spawner.find((e) => e.name === "enemyGroup");
+        const enemyGroup = `${this._currentChunk.split(".")[0]}_group_${groupData.value}`;
 
-    private _parseEnemyGroupData(id: string) {
-        return 
-    }
+        const currentMap = this._scene.make.tilemap({ key: enemyGroup });
 
+        const enemies: Phaser.Types.Tilemaps.TiledObject[] = currentMap.getObjectLayer("enemies").objects.map(e => e);
+        const path: Phaser.Types.Tilemaps.TiledObject[] = currentMap.getObjectLayer("paths").objects.map(e => e);
+
+        setupEnemyData(this._scene, enemies, path, position);
+    }
 }

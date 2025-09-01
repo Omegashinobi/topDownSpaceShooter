@@ -143,7 +143,7 @@ export function loadEnemyData(loader: Phaser.Loader.LoaderPlugin, queue: Map<num
 export function loadEnemyGroupData(loader: Phaser.Loader.LoaderPlugin, queue: Map<number, { type: string, file: () => void }>): Promise<void> {
     return new Promise(async (resolve, reject) => {
         try {
-            for (let [key, value] of Object.entries(manifest.layout)) {
+            for (let [key, value] of Object.entries(manifest.enemyGroups)) {
                 queue.set(loadIndex(), { type: "enemyGroups", file: () => loader.tilemapTiledJSON(value.split(".")[0], `/layout/enemyGroups/${value}`) });
             }
             resolve();

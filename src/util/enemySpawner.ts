@@ -1,15 +1,11 @@
 import BeamEnemy from "../components/enemy/beamEnemy";
 import Enemy from "../components/enemy/enemy";
 import Turret from "../components/enemy/turret";
-import { IMob, TMobType, Position, ISwarmerData } from "../components/mob/data/mob";
+import { IMob, TMobType, Position, ISwarmerData, MobPathData } from "../components/mob/data/mob";
 import Mob from "../components/mob/mob";
 import * as assetManifest from "../assets/assetManifest.json";
 import BaseScene from "../scene/base/base";
 
-import { action as astroidAction } from "../components/enemy/tweens/astroid";
-import { action as scoutMK1Action } from "../components/enemy/tweens/scoutMK1";
-import { action as turretAction } from "../components/enemy/tweens/turret";
-import { action as swarmerAction } from "../components/enemy/tweens/swarmers";
 import { IManifest } from "../data/manifest";
 
 let manifest: IManifest = assetManifest;
@@ -18,13 +14,6 @@ interface IextendedIMobOptions {
     spawnFlag: number,
     endFlag: number,
     spawnDelay: number,
-}
-interface ISpawnData {
-    scene: BaseScene,
-    hitArea: number[],
-    trackPosition: number,
-    flagData: Phaser.Types.Tilemaps.TiledObject[],
-    holdLocation?: Position
 }
 
 function enemySpawner(enemyType: string, options: IMob): Enemy {
@@ -40,41 +29,27 @@ function enemySpawner(enemyType: string, options: IMob): Enemy {
     return mob;
 }
 
-export function setupEnemyData(scene: BaseScene, value: string): Promise<void> {
+export function setupEnemyData(
+    scene: BaseScene,
+    enemies: Phaser.Types.Tilemaps.TiledObject[],
+    paths: Phaser.Types.Tilemaps.TiledObject[],
+    groupDataPosition : Position,
+): Promise<void> {
     return new Promise((resolve, reject) => {
         try {
-            Object.entries(manifest.layout).forEach((layout, index) => {
-                const mapfile = `enemy_${value}_${index * 45}-${(index + 1) * 45}`;
-                const currentMap = scene.make.tilemap({ key: mapfile });
-
-                scene.layoutMap.push(currentMap);
-
-                const enemies = currentMap.objects.find((e) => { return e.name === "enemies" }).objects;
-                const flagData = currentMap.objects.find((e) => { return e.name === "flags" }).objects;
-                const pathData = currentMap.objects.find((e) => { return e.name === "swarmerPath" })?.objects;
-
-                enemies.forEach((e) => {
-                    const baseClass = getBaseClass(e.properties);
-                    const hitArea: number[] = baseClass.hitArea.toString().split(",").map(e => parseInt(e));
-                    const trackPosition = calculateTrackPosition(e.y) * (index + 1);
-                    const pathRef = e.properties.find((el: Phaser.Types.Tilemaps.TiledObject) => { return el.name === "path" })?.value;
-                    const holdLocation: Position | undefined = checkForHoldPositionData(e,flagData);
-
-                    if (e.type.toLowerCase() === "swarmer") {
-                        for (let i = 0; i < e.properties.find((e: Phaser.Types.Tilemaps.TiledObject) => { return e.name === "amount" }).value; i++) {
-                            const mob = spawn(baseClass, e, { scene, hitArea, trackPosition, flagData } as ISpawnData);
-                            mob.setUpActions(getEnemyActionSet(mob, trackPosition, {
-                                paths: pathData.find((el) => { return el.id === pathRef }).polyline as { x: number, y: number }[],
-                                index: i,
-                                spawnDelay: e.properties.find((el: Phaser.Types.Tilemaps.TiledObject) => { return el.name === "spawnDelay" }).value
-                            }));
-                        }
-                    } else {
-                        const mob = spawn(baseClass, e, { scene, hitArea, trackPosition, flagData, holdLocation } as ISpawnData);
-                        mob.setUpActions(getEnemyActionSet(mob, trackPosition));
-                    }
+            enemies.forEach((e) => {
+                const baseClass = e.properties.find((e: Phaser.Types.Tilemaps.TiledObject) => e.name === "baseClass");
+                const pathDataRef = baseClass.value.path_data;
+                const pathData = e.properties.filter((e: Phaser.Types.Tilemaps.TiledObject) => e.name.substring(0, e.name.length - 2) === "path_data")
+                .map((el: any )=>{
+                    return el.value;
                 })
-            })
+                const polyLineData = paths.find((e) => e.id === pathDataRef).polyline.map((e) => { return { x: e.x, y: e.y } });
+                const actions: Phaser.Types.Time.TimelineEventConfig[] = setupPathData(polyLineData, pathData);
+                const mob = spawn(baseClass.value,e,actions,groupDataPosition,scene);
+
+                mob.setUpActions(actions);
+            });
             resolve();
         }
         catch (err) {
@@ -84,11 +59,43 @@ export function setupEnemyData(scene: BaseScene, value: string): Promise<void> {
     })
 }
 
+function setupPathData(pathArray: Position[], pathData: MobPathData[]): Phaser.Types.Time.TimelineEventConfig[] {
+    let actionData : Phaser.Types.Time.TimelineEventConfig[] = [];
+    pathArray.forEach((e, i) => {
+        if (pathData[i] === undefined) {
+            console.error(`Missing Path ${i} data for Path Array ${i}`);
+        } else {
+            actionData.push({
+                at: pathData[i].at,
+                tween : {
+                    targets: pathData[i].target || "self",
+                    x: e.x,
+                    y: e.y,
+                    duration: pathData[i].duration,
+                    ease: pathData[i].ease,
+                },
+                event: pathData[i].event || undefined
+            })
+        }
+    });
+
+    return actionData;
+}
+
+function generateHitData(texture : string) : number[] {
+    return [
+        texture.length
+    ];
+}
+
 function spawn(baseClass: IMob & IextendedIMobOptions,
     e: Phaser.Types.Tilemaps.TiledObject,
-    spawnData: ISpawnData
+    actions: Phaser.Types.Time.TimelineEventConfig[],
+    groupData: Position,
+    scene : BaseScene
 ) {
-    const { scene, hitArea, trackPosition, flagData, holdLocation } = spawnData;
+    const hitArea = generateHitData(baseClass.texture);
+    const timer = calculateTrackPosition(groupData.y)
 
     return enemySpawner(baseClass.type.toLowerCase(), {
         type: e.type.toLowerCase() as TMobType,
@@ -102,10 +109,8 @@ function spawn(baseClass: IMob & IextendedIMobOptions,
         health: baseClass.health,
         hitArea: new Phaser.Geom.Rectangle(hitArea[0], hitArea[1], hitArea[2], hitArea[3]),
         enemyOptions: {
-            tracker: trackPosition / 100,
-            startPosition: baseClass.spawnFlag === 0 || undefined ? undefined : { x: flagData.find(e => e.id === baseClass.spawnFlag).x, y: flagData.find(e => e.id === baseClass.spawnFlag).y },
-            waitPosition: holdLocation !== undefined ? { x: holdLocation.x, y: holdLocation.y } as Position : { x: e.x, y: e.y } as Position,
-            endPosition: baseClass.endFlag === 0 || undefined ? undefined : { x: flagData.find(e => e.id === baseClass.endFlag).x, y: flagData.find(e => e.id === baseClass.endFlag).y }
+            tracker: timer / 100,
+            actions: actions
         },
     });
 }
@@ -118,34 +123,6 @@ function calculateTrackPosition(y: number) {
     return (baseHeight - y) * trackerDelay;
 }
 
-function getEnemyActionSet(mob: Mob, trackPosition: number, swarmerData?: ISwarmerData): Phaser.Types.Time.TimelineEventConfig[] {
-
-    const name: string = mob.instance.name;
-    const gameObject: Mob = mob;
-
-    let action: Phaser.Types.Time.TimelineEventConfig[];
-
-    switch (name) {
-        case "scoutMK1": {
-            action = scoutMK1Action(trackPosition, gameObject);
-            break;
-        }
-        case "astroid": {
-            action = astroidAction(trackPosition, gameObject);
-            break;
-        }
-        case "turret": {
-            action = turretAction(trackPosition, gameObject);
-            break;
-        }
-        case "swarmer": {
-            action = swarmerAction(trackPosition, gameObject, swarmerData);
-        }
-    }
-
-    return action;
-}
-
 function checkForHoldPositionData(e: Phaser.Types.Tilemaps.TiledObject, flagData: Phaser.Types.Tilemaps.TiledObject[]): Position {
     const prop = e.properties.find((e: Phaser.Types.Tilemaps.TiledObject) => e.name === "holdLocation")?.value || undefined;
 
@@ -153,14 +130,10 @@ function checkForHoldPositionData(e: Phaser.Types.Tilemaps.TiledObject, flagData
         return undefined;
     }
 
-    const data = flagData.find((el)=>{return el.id === prop});
+    const data = flagData.find((el) => { return el.id === prop });
 
     return {
         x: data.x,
         y: data.y
     };
-}
-
-function getBaseClass(props: [{ value: {} }]): IMob & IextendedIMobOptions {
-    return props.find((el: any) => el.name === "baseClass").value as IMob & IextendedIMobOptions;
 }

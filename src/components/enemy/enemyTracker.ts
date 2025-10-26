@@ -1,4 +1,5 @@
 import Enemy from "./enemy";
+import EnemyGroup from "./enemyGroup";
 
 export default class EnemyTracker {
     container : Phaser.GameObjects.Container;
@@ -6,7 +7,7 @@ export default class EnemyTracker {
 
     isMoving : boolean = true;
     trackerTimer : number = 0
-    mobList : Enemy[] = [];
+    enemyGroups : EnemyGroup[] = [];
 
     debug : boolean = true;
     debugText : Phaser.GameObjects.Text;
@@ -32,11 +33,15 @@ export default class EnemyTracker {
         }
         if(this.isMoving) {
             this.trackerTimer += delta;
+
+            this.enemyGroups.forEach((e: EnemyGroup) => {
+                e.checkIfTriggerTimer(this.trackerTimer);
+            });
         }
     }
 
-    addEnemy(enemy: Enemy) {
-        this.mobList.push(enemy);
+    addGroup(group: EnemyGroup) { 
+        this.enemyGroups.push(group);
     }
 
     debugTimeSet(val : number) : string {

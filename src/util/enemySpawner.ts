@@ -33,56 +33,60 @@ export function setupEnemyData(
     scene: BaseScene,
     enemies: Phaser.Types.Tilemaps.TiledObject[],
     paths: Phaser.Types.Tilemaps.TiledObject[],
-    groupDataPosition : Position,
-): Promise<void> {
+    groupDataPosition: number,
+): Promise<Enemy[]> {
     return new Promise((resolve, reject) => {
+        const enemyData: Enemy[] = [];
         try {
             enemies.forEach((e) => {
                 const baseClass = e.properties.find((e: Phaser.Types.Tilemaps.TiledObject) => e.name === "baseClass");
                 const pathDataRef = baseClass.value.path_data;
                 const pathData = e.properties.filter((e: Phaser.Types.Tilemaps.TiledObject) => e.name.substring(0, e.name.length - 2) === "path_data")
-                .map((el: any )=>{
-                    return el.value;
-                })
-                const polyLineData = paths.find((e) => e.id === pathDataRef).polyline.map((e) => { return { x: e.x, y: e.y } });
+                    .map((el: any) => {
+                        return el.value;
+                    })
+                const linkedPath = paths.find((e) => e.id === pathDataRef);
+                const polyLineData = linkedPath.polyline.map((e) => { return { x: e.x, y: e.y } });
                 const actions: Phaser.Types.Time.TimelineEventConfig[] = setupPathData(polyLineData, pathData);
-                const mob = spawn(baseClass.value,e,actions,groupDataPosition,scene);
+                const mob = spawn(baseClass.value, e, actions, groupDataPosition, scene);
 
                 mob.setUpActions(actions);
+
+                enemyData.push(mob);
             });
-            resolve();
         }
         catch (err) {
             alert(err);
             reject(err);
         }
-    })
+        resolve(enemyData);
+    });
 }
 
 function setupPathData(pathArray: Position[], pathData: MobPathData[]): Phaser.Types.Time.TimelineEventConfig[] {
-    let actionData : Phaser.Types.Time.TimelineEventConfig[] = [];
-    pathArray.forEach((e, i) => {
+    let actionData: Phaser.Types.Time.TimelineEventConfig[] = [];
+    pathArray.forEach((e, i, a) => {
         if (pathData[i] === undefined) {
             console.error(`Missing Path ${i} data for Path Array ${i}`);
         } else {
             actionData.push({
                 at: pathData[i].at,
-                tween : {
+                tween: {
                     targets: pathData[i].target || "self",
-                    x: e.x,
-                    y: e.y,
+                    x: a[i + 1] !== undefined ? a[i + 1].x : e.x,
+                    y: a[i + 1] !== undefined ? a[i + 1].y : e.y,
                     duration: pathData[i].duration,
                     ease: pathData[i].ease,
                 },
                 event: pathData[i].event || undefined
-            })
+            });
         }
     });
 
     return actionData;
 }
 
-function generateHitData(texture : string) : number[] {
+function generateHitData(texture: string): number[] {
     return [
         texture.length
     ];
@@ -91,11 +95,11 @@ function generateHitData(texture : string) : number[] {
 function spawn(baseClass: IMob & IextendedIMobOptions,
     e: Phaser.Types.Tilemaps.TiledObject,
     actions: Phaser.Types.Time.TimelineEventConfig[],
-    groupData: Position,
-    scene : BaseScene
+    trackerPos: number,
+    scene: BaseScene,
 ) {
     const hitArea = generateHitData(baseClass.texture);
-    const timer = calculateTrackPosition(groupData.y)
+    const timer = calculateTrackPosition(trackerPos);
 
     return enemySpawner(baseClass.type.toLowerCase(), {
         type: e.type.toLowerCase() as TMobType,

@@ -165,9 +165,9 @@
                             {
                              "at":0,
                              "delay":"0",
-                             "duration":0,
+                             "duration":10,
                              "ease":"Sine.easeInOut",
-                             "event":"",
+                             "event":"ACTIVE",
                              "target":""
                             }
                         }, 
@@ -177,9 +177,9 @@
                          "type":"class",
                          "value":
                             {
-                             "at":0,
+                             "at":10000,
                              "delay":"0",
-                             "duration":0,
+                             "duration":10,
                              "ease":"Sine.easeInOut",
                              "event":"DEACTIVE",
                              "target":""
@@ -234,9 +234,9 @@
                             {
                              "at":0,
                              "delay":"0",
-                             "duration":0,
+                             "duration":10,
                              "ease":"Sine.easeInOut",
-                             "event":"",
+                             "event":"ACTIVE",
                              "target":""
                             }
                         }, 
@@ -246,7 +246,7 @@
                          "type":"class",
                          "value":
                             {
-                             "at":0,
+                             "at":10000,
                              "delay":"0",
                              "duration":0,
                              "ease":"Sine.easeInOut",
@@ -303,9 +303,9 @@
                             {
                              "at":0,
                              "delay":"0",
-                             "duration":0,
+                             "duration":10,
                              "ease":"Sine.easeInOut",
-                             "event":"",
+                             "event":"ACTIVE",
                              "target":""
                             }
                         }, 
@@ -315,7 +315,7 @@
                          "type":"class",
                          "value":
                             {
-                             "at":0,
+                             "at":10000,
                              "delay":"0",
                              "duration":0,
                              "ease":"Sine.easeInOut",
@@ -373,9 +373,9 @@
                             {
                              "at":0,
                              "delay":"0",
-                             "duration":0,
+                             "duration":10,
                              "ease":"Sine.easeInOut",
-                             "event":"",
+                             "event":"ACTIVE",
                              "target":""
                             }
                         }, 
@@ -385,7 +385,7 @@
                          "type":"class",
                          "value":
                             {
-                             "at":0,
+                             "at":10000,
                              "delay":"0",
                              "duration":0,
                              "ease":"Sine.easeInOut",
@@ -438,9 +438,9 @@
                             {
                              "at":0,
                              "delay":"0",
-                             "duration":0,
+                             "duration":10,
                              "ease":"Sine.easeInOut",
-                             "event":"",
+                             "event":"ACTIVE",
                              "target":""
                             }
                         }, 
@@ -450,7 +450,7 @@
                          "type":"class",
                          "value":
                             {
-                             "at":0,
+                             "at":10000,
                              "delay":"0",
                              "duration":0,
                              "ease":"Sine.easeInOut",

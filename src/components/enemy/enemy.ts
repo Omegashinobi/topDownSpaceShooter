@@ -92,13 +92,14 @@ export default class Enemy extends Mob {
     }
 
     private enemyEvents() {
-        this.actions.on('IDLE', () => {
+        this.actions.on('ACTIVE', () => {
             this.canFire = false;
         })
         this.actions.on('ENABLE_FIRE', () => {
             this.canFire = true;
         })
-        this.actions.on('DESTROY', () => {
+        this.actions.on('DEACTIVE',()=>{
+            this._active = false;
             this.canFire = false;
             this.destroy();
         })

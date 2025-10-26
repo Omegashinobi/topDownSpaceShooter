@@ -52,7 +52,6 @@ export default class BaseScene extends Phaser.Scene {
     }
 
     private mobs: Mob[] = [];
-    private enemyTracker: EnemyTracker;
     private UIcontainer = new UIContainer(this);
     private UI: UI[] = [
         new ComboMeter({ x: 100, y: 80, name: "Combo Meter" }, this, this._combo, this._comboTimer),
@@ -74,8 +73,10 @@ export default class BaseScene extends Phaser.Scene {
     public setReady : ()=>void;
     public ready: Promise<void> = new Promise((resolve) => this.setReady = resolve);
     public bitmapFonts: string[] = [];
-    
+    public enemyTracker: EnemyTracker;
 
+    public levelName : string;
+    
     constructor() {
         super();
     }
@@ -95,8 +96,8 @@ export default class BaseScene extends Phaser.Scene {
 
         this.background[1].tilePositionX += 32;
         this.background[2].tilePositionX -= 32;
-        
-        this.levelManager = new LevelManager("level1", this);
+
+        this.levelManager = new LevelManager(this.levelName, this);
 
         mobList(this);
         parseBitmapFont(this);
@@ -104,14 +105,12 @@ export default class BaseScene extends Phaser.Scene {
         this.enemyTracker.create(this)
         this.physics.world.enable(this.mobs.map((e: Mob) => e.container), 0);
         
-
         this.UIcontainer.create();
         this.UI.forEach((e) => {
             e.create(this.UIcontainer);
         });
 
         this.player = this.findGameObjectWithTag("player");
-
     }
 
     public async update(time: number, delta: number): Promise<void> {
@@ -186,6 +185,5 @@ export default class BaseScene extends Phaser.Scene {
             layer.tilemapLayer.x = mob.instance.x - offsetX;
             layer.tilemapLayer.y = mob.instance.y - offsetY;
         }
-
     }
 }

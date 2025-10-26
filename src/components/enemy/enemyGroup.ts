@@ -9,6 +9,8 @@ export default class EnemyGroup {
         this._enemies.forEach((e : Enemy)=>e.active = value);
     }
     public get active() { return this._active; }
+    public _activeTimer : number;
+
     /**
      * registerGroup
      */
@@ -18,7 +20,7 @@ export default class EnemyGroup {
     }
 
     public checkIfTriggerTimer(delta : number) {
-        if(this._triggerTimer >= delta) {
+        if(delta >= this._triggerTimer) {
             this.active = true;
         }
     }

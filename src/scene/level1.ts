@@ -10,7 +10,9 @@ export default class Level1 extends BaseScene {
     }
 
     async create() : Promise<void> {
-        super.create();
+        this.levelName = "level1";
+        await super.create();
+        this.player.active = true;
     }
 
     async update(time: number, delta: number) : Promise<void> {

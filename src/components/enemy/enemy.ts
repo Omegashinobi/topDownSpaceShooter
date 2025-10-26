@@ -65,9 +65,6 @@ export default class Enemy extends Mob {
         });
         this.actions = this.scene.add.timeline(parsed);
         this.enemyEvents();
-
-        this.container.x = parsed[0].tween.x;
-        this.container.y = parsed[0].tween.y;
     }
 
     public fire(towards: boolean = false) {

@@ -37,9 +37,6 @@ export default class Mob {
     movementSpeed = 0;
     speed: number;
 
-    x: number;
-    y: number;
-
     debug: {
         enabled: boolean,
         graphics: Phaser.GameObjects.Graphics
@@ -57,6 +54,19 @@ export default class Mob {
     score: number;
 
     constructor() { }
+
+    get x() : number {
+        return this.container.x;
+    }
+    set x(value : number) {
+        this.container.x = value;
+    }
+    get y() : number {
+        return this.container.y;
+    }
+    set y(value : number) {
+        this.container.y = value;
+    }
 
     preload() {
         this.onPointerUpFunction(this.onPointerUp);

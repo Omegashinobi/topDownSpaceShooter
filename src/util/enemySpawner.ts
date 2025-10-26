@@ -47,7 +47,7 @@ export function setupEnemyData(
                     })
                 const linkedPath = paths.find((e) => e.id === pathDataRef);
                 const polyLineData = linkedPath.polyline.map((e) => { return { x: e.x, y: e.y } });
-                const actions: Phaser.Types.Time.TimelineEventConfig[] = setupPathData(polyLineData, pathData);
+                const actions: Phaser.Types.Time.TimelineEventConfig[] = setupPathData(e, polyLineData, pathData);
                 const mob = spawn(baseClass.value, e, actions, groupDataPosition, scene);
 
                 mob.setUpActions(actions);
@@ -63,18 +63,18 @@ export function setupEnemyData(
     });
 }
 
-function setupPathData(pathArray: Position[], pathData: MobPathData[]): Phaser.Types.Time.TimelineEventConfig[] {
+function setupPathData(baseClass: Phaser.Types.Tilemaps.TiledObject, pathArray: Position[], pathData: MobPathData[]): Phaser.Types.Time.TimelineEventConfig[] {
     let actionData: Phaser.Types.Time.TimelineEventConfig[] = [];
     pathArray.forEach((e, i, a) => {
         if (pathData[i] === undefined) {
             console.error(`Missing Path ${i} data for Path Array ${i}`);
         } else {
             actionData.push({
-                at: pathData[i].at,
+                at: pathData[i].at + Math.abs((baseClass.y / 64) * 1000),
                 tween: {
                     targets: pathData[i].target || "self",
-                    x: a[i + 1] !== undefined ? a[i + 1].x : e.x,
-                    y: a[i + 1] !== undefined ? a[i + 1].y : e.y,
+                    x: (a[i + 1] !== undefined ? a[i + 1].x : e.x) + Math.abs(baseClass.x),
+                    y: (a[i + 1] !== undefined ? a[i + 1].y : e.y) + Math.abs(baseClass.y),
                     duration: pathData[i].duration,
                     ease: pathData[i].ease,
                 },

@@ -1,9 +1,4 @@
-import Enemy from "../components/enemy/enemy";
-import Mob from "../components/mob/mob";
-import Player from "../components/player/player";
-import Projectile from "../components/projectile/projectile";
 import BaseScene from "./base/base";
-import Moblist from "./base/base.mobs"
 
 export default class Level1 extends BaseScene {
     constructor(){
@@ -15,7 +10,9 @@ export default class Level1 extends BaseScene {
     }
 
     async create() : Promise<void> {
-        super.create();
+        this.levelName = "level1";
+        await super.create();
+        this.player.active = true;
     }
 
     async update(time: number, delta: number) : Promise<void> {

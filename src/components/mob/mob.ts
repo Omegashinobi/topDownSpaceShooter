@@ -1,3 +1,4 @@
+import { DEBUG } from "../../app";
 import BaseScene from "../../scene/base/base";
 import { TMobType, IDebugOptions, IEnemyOptions, IMob, TMovementType } from "./data/mob";
 
@@ -18,8 +19,8 @@ export default class Mob {
     protected hasIdle: boolean;
     protected scene: BaseScene;
     protected actions: any;
-    protected actionsPlaying: boolean = false;
-    protected _active: boolean = true;
+    protected _actionsPlaying: boolean = false;
+    protected _active: boolean = false;
     public container: Phaser.Physics.Arcade.Sprite;
     public instance: IMob;
     public canDamage: boolean = true;
@@ -31,19 +32,13 @@ export default class Mob {
 
     public set active(value: boolean) {
         this._active = value;
-        value ? this.onSetActive : this.onSetDeactive;
+        this.sprite.visible = value;
     }
-    protected onSetActive: () => void;
-    protected onSetDeactive: () => void;
 
     movementSpeed = 0;
     speed: number;
 
-    x: number;
-    y: number;
-
     debug: {
-        enabled: boolean,
         graphics: Phaser.GameObjects.Graphics
     }
 
@@ -60,37 +55,53 @@ export default class Mob {
 
     constructor() { }
 
+    get x(): number {
+        return this.container.x;
+    }
+    set x(value: number) {
+        this.container.x = value;
+    }
+    get y(): number {
+        return this.container.y;
+    }
+    set y(value: number) {
+        this.container.y = value;
+    }
+
     preload() {
         this.onPointerUpFunction(this.onPointerUp);
     }
 
     create(options: IMob): void {
-        
+
 
         this.scene = options.scene;
         this.instance = options;
         this.hitArea = options.hitArea as Phaser.Geom.Rectangle;
 
-        this.debug = {
-            enabled: false,
-            graphics: this.scene.add.graphics()
+        if (DEBUG) {
+            this.debug = {
+                graphics: this.scene.add.graphics()
+            }
         }
+
         this.container = this.scene.physics.add.sprite(this.instance.x, this.instance.y, this.instance.texture);
         this.container.setVisible(false);
-        this.sprite = new Phaser.GameObjects.Sprite(this.scene,0,0,this.instance.texture);
-        this.sprite.addToDisplayList()
+        this.sprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, this.instance.texture);
+        this.sprite.addToDisplayList();
+        this.sprite.visible = this._active;
 
-        this.scene.anims.createFromAseprite(this.instance.texture,undefined,this.sprite);
+        this.scene.anims.createFromAseprite(this.instance.texture, undefined, this.sprite);
 
         this.sprite.play({ key: `idle`, repeat: -1 });
- 
+
         if (this.collisionList) {
             this.collisionList.forEach((e: string) => {
                 this.createCollisionData(e);
-            })
+            });
         };
 
-        if (this.debug.enabled) {
+        if (DEBUG) {
             this.debugCreate();
         }
 
@@ -114,8 +125,8 @@ export default class Mob {
         this.instance.x = this.container.x;
         this.instance.y = this.container.y;
 
-        this.sprite.setPosition(this.instance.x,this.instance.y);
-        if (this.debug.enabled) {
+        this.sprite.setPosition(this.instance.x, this.instance.y);
+        if (DEBUG) {
             this.debugUpdate();
         }
 
@@ -140,7 +151,7 @@ export default class Mob {
 
     debugUpdate() {
         this.debugOptions.positionText.text = `${Math.round(this.container.x)},${Math.round(this.container.y)}`;
-        this.debugOptions.positionText.setPosition(this.container.x + 20,this.container.y)
+        this.debugOptions.positionText.setPosition(this.container.x + 20, this.container.y)
     }
 
     createCollisionData(otherTag: string) {
@@ -190,8 +201,8 @@ export default class Mob {
             this.scene.score += this.score;
             this.scene.combo++;
         }
-        if(this.destoryChildren) {
-            this.childMobs.forEach(e => e.destroy); 
+        if (this.destoryChildren) {
+            this.childMobs.forEach(e => e.destroy);
         }
         this.actions?.clear();
         this.container.destroy();
@@ -224,13 +235,13 @@ export default class Mob {
         mob.parentMob = this;
     }
 
-    public correctSpriteRotation(){
+    public correctSpriteRotation() {
         let rot = this.container.rotation;
         this.sprite.setRotation(Mob.counterRotation(rot));
     }
 
-    public static counterRotation(originalRot : number) {
-        return (-Math.PI + (originalRot - (Math.PI/2)));
+    public static counterRotation(originalRot: number) {
+        return (-Math.PI + (originalRot - (Math.PI / 2)));
     }
 
     public static spawn<T extends Mob>(options: IMob, mobType: Constructor<T>) {
@@ -240,11 +251,11 @@ export default class Mob {
         return instance;
     }
 
-    public static getAngle(obj1 : Phaser.Geom.Point ,obj2: Phaser.Geom.Point ) {
+    public static getAngle(obj1: Phaser.Geom.Point, obj2: Phaser.Geom.Point) {
         return (Math.atan2(obj2.y - obj1.y, obj2.x - obj1.x) * 180 / Math.PI)
     }
 
-    public static getRotation(obj1 : Phaser.Geom.Point ,obj2: Phaser.Geom.Point) {
+    public static getRotation(obj1: Phaser.Geom.Point, obj2: Phaser.Geom.Point) {
         return Math.atan2(obj2.y - obj1.y, obj2.x - obj1.x);
     }
 }     

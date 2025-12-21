@@ -1,30 +1,13 @@
-import { Scene } from "phaser";
 import BaseScene from "./base";
 import * as assetManifest from "../../assets/assetManifest.json";
-import { ITileChunks, ITileLayer, ITileMap } from "../data/base.data";
-import { TMobType } from "../../components/mob/data/mob";
-import Mob from "../../components/mob/mob";
+import { IManifest } from "../../data/manifest";
 
 interface IAnimationList {
     key: string,
     animations: string[]
 }
 
-export interface iManifest {
-    base: string,
-    sprites: {
-        atlas: string[],
-        images: string[]
-    }
-    tilemaps: string[],
-    tilesprites: string[],
-    layout: string[],
-    bitmapFont: string[]
-}
-
-let manifest: iManifest = assetManifest;
-
-let files = [];
+let manifest: IManifest = assetManifest;
 let queue = new Map<number, { type: string, file: () => void }>
 
 let _loadIndex: number = 0;
@@ -42,6 +25,7 @@ export function load(scene: BaseScene): Promise<void> {
             tilemapLoader(loader, queue);
             loadTileSprites(loader, queue);
             loadEnemyData(loader, queue);
+            loadEnemyGroupData(loader, queue);
             loadBitmapFont(loader, scene, queue);
 
             loader.setBaseURL("/assets/sprites/");
@@ -156,6 +140,20 @@ export function loadEnemyData(loader: Phaser.Loader.LoaderPlugin, queue: Map<num
     })
 }
 
+export function loadEnemyGroupData(loader: Phaser.Loader.LoaderPlugin, queue: Map<number, { type: string, file: () => void }>): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            for (let [key, value] of Object.entries(manifest.enemyGroups)) {
+                queue.set(loadIndex(), { type: "enemyGroups", file: () => loader.tilemapTiledJSON(value.split(".")[0], `/layout/enemyGroups/${value}`) });
+            }
+            resolve();
+        } catch (err: any) {
+            alert(err.message);
+            reject(err.message);
+        }
+    })
+}
+
 export function loadBitmapFont(loader: Phaser.Loader.LoaderPlugin, scene: BaseScene, queue: Map<number, { type: string, file: () => void }>): Promise<void> {
     return new Promise(async (resolve, reject) => {
         try {
@@ -178,4 +176,3 @@ export function parseBitmapFont(scene: BaseScene) {
         Phaser.GameObjects.BitmapText.ParseFromAtlas(scene, e, `${e}_fontImage`, undefined, `${e}_font`);
     });
 }
-

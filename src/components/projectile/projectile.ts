@@ -15,7 +15,7 @@ export default class Projectile extends Mob {
         left: number,
         right: number,
         top: number,
-        bottom : number
+        bottom: number
     }
 
 
@@ -53,22 +53,24 @@ export default class Projectile extends Mob {
 
         this.movementType = options.movementType;
 
-        if(this.movementType === "rotationBased" && this.target) {
+        if (this.movementType === "rotationBased" && this.target) {
             let rotation = Phaser.Math.Angle.Between(
                 this.container.x,
                 this.container.y,
                 this.target.container.x,
                 this.target.container.y
             );
-            let vel =  new Phaser.Physics.Arcade.ArcadePhysics(this.scene).velocityFromRotation(rotation,this.speed);
+            let vel = new Phaser.Physics.Arcade.ArcadePhysics(this.scene).velocityFromRotation(rotation, this.speed);
             this.container.setRotation(rotation);
-            this.container.setVelocity(vel.x,vel.y);
+            this.container.setVelocity(vel.x, vel.y);
         }
+
+        this.active = true;
     }
 
     update(time: number, delta: number): void {
         super.update(time, delta);
-        if(this.movementType === "normal") {
+        if (this.movementType === "normal") {
             this.container.y += -(this.instance.speed / delta);
         } else {
             this.sprite.setFlipY(true);
@@ -78,10 +80,10 @@ export default class Projectile extends Mob {
     }
 
     checkIfOutOfBounds() {
-        if(this.instance.y < this.bounds.top ||
-        this.instance.x < this.bounds.left ||
-        this.instance.y > this.bounds.bottom ||
-        this.instance.x > this.bounds.right ) {
+        if (this.instance.y < this.bounds.top ||
+            this.instance.x < this.bounds.left ||
+            this.instance.y > this.bounds.bottom ||
+            this.instance.x > this.bounds.right) {
             this.destroy();
         }
     }

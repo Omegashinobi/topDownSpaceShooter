@@ -6,10 +6,8 @@ import ComboMeter from "../../components/UI/comboMeter";
 import ScoreMeter from "../../components/UI/scoreMeter";
 import UIContainer from "../../components/UI/UIContainer";
 import EnemyTracker from "../../components/enemy/enemyTracker";
-import parallax from "../../components/actions/parallax";
-import Player from "../../components/player/player";
-import { resolve } from "path-browserify";
 import { setupEnemyData } from "../../util/enemySpawner";
+import LevelManager from "../../util/levelManager";
 
 export default class BaseScene extends Phaser.Scene {
 
@@ -54,7 +52,6 @@ export default class BaseScene extends Phaser.Scene {
     }
 
     private mobs: Mob[] = [];
-    private enemyTracker: EnemyTracker;
     private UIcontainer = new UIContainer(this);
     private UI: UI[] = [
         new ComboMeter({ x: 100, y: 80, name: "Combo Meter" }, this, this._combo, this._comboTimer),
@@ -69,12 +66,22 @@ export default class BaseScene extends Phaser.Scene {
     public map: Phaser.Tilemaps.Tilemap;
     public layoutMap: Phaser.Tilemaps.Tilemap[] = [];
 
+    public levelManager: LevelManager;
+
     public background: Phaser.GameObjects.TileSprite[] = [];
     public player: Mob;
-    public setReady : ()=>void;
-    public ready: Promise<void> = new Promise((resolve) => this.setReady = resolve);
+
+
+    public setPreloadComplete: () => void;
+    public preloadComplete: Promise<void> = new Promise((resolve) => this.setPreloadComplete = resolve);
+
+    public setCreateComplete: () => void;
+    public createComplete: Promise<void> = new Promise((resolve) => this.setCreateComplete = resolve);
+
     public bitmapFonts: string[] = [];
-    
+    public enemyTracker: EnemyTracker;
+
+    public levelName: string;
 
     constructor() {
         super();
@@ -83,12 +90,12 @@ export default class BaseScene extends Phaser.Scene {
     public async preload(): Promise<void> {
         await load(this).then(() => {
             this.enemyTracker = new EnemyTracker();
-            this.setReady()
+            this.setPreloadComplete()
         });
     }
 
     public async create(): Promise<void> {
-        await this.ready;
+        await this.preloadComplete;
         this.background[0] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_1");
         this.background[1] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_2");
         this.background[2] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_3");
@@ -96,14 +103,13 @@ export default class BaseScene extends Phaser.Scene {
         this.background[1].tilePositionX += 32;
         this.background[2].tilePositionX -= 32;
 
-        createMap(this, "level1");
+        this.levelManager = new LevelManager(this.levelName, this);
+
         mobList(this);
-        setupEnemyData(this, "level1");
         parseBitmapFont(this);
 
         this.enemyTracker.create(this)
         this.physics.world.enable(this.mobs.map((e: Mob) => e.container), 0);
-        
 
         this.UIcontainer.create();
         this.UI.forEach((e) => {
@@ -112,10 +118,11 @@ export default class BaseScene extends Phaser.Scene {
 
         this.player = this.findGameObjectWithTag("player");
 
+        this.setCreateComplete();
     }
 
     public async update(time: number, delta: number): Promise<void> {
-        await this.ready;
+        await this.createComplete;
 
         this.mobs.forEach((e) => {
             e.update(time, delta);
@@ -186,6 +193,5 @@ export default class BaseScene extends Phaser.Scene {
             layer.tilemapLayer.x = mob.instance.x - offsetX;
             layer.tilemapLayer.y = mob.instance.y - offsetY;
         }
-
     }
 }

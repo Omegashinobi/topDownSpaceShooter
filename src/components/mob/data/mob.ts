@@ -27,10 +27,7 @@ export interface IDebugOptions {
 }
 
 export interface IEnemyOptions {
-    tracker: number,
-    startPosition: Position | null,
-    waitPosition: Position | null,
-    endPosition: Position | null,
+    actions: Phaser.Types.Time.TimelineEventConfig[]
 }
 
 export interface IBossOptions {
@@ -38,9 +35,14 @@ export interface IBossOptions {
 }
 
 export interface ISwarmerData {
-    paths :  {x:number,y:number}[],
-    index : number,
-    spawnDelay : number
+    paths: { x: number, y: number }[],
+    index: number,
+    spawnDelay: number
+}
+
+export interface IEnemyMapData {
+    initalLevelOffset: number
+    levelHeight: number
 }
 
 export type Position = {
@@ -53,4 +55,13 @@ export type FlagData = {
         start: Position
         end: Position
     }]
+}
+
+export type MobPathData = {
+    at: number
+    delay: number
+    duration: number
+    ease: string
+    event: string
+    target: string
 }

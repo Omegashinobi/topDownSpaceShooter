@@ -1,11 +1,7 @@
-import { Scene } from "phaser";
 import Player from "../../components/player/player";
 import BaseScene from "./base";
 import Mob from "../../components/mob/mob";
 import { MAX_SIZE_HEIGHT_SCREEN, MAX_SIZE_WIDTH_SCREEN } from "../../app";
-import Enemy from "../../components/enemy/enemy";
-import Turret from "../../components/enemy/turret";
-import BeamEnemy from "../../components/enemy/beamEnemy";
 
 export default function (scene: BaseScene): Mob[] {
     return [

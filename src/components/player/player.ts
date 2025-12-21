@@ -45,33 +45,33 @@ import InputHandler from "../../util/inputHandler"
 
     movement(delta: number) {
         if (InputHandler.keyboardInput.left.isDown || (InputHandler.gamepadReady ? InputHandler.joyPadInput.right.isDown : null)) {
-            this.container.x -= this.instance.speed / delta;
-            if (this.container.x < this.bounds.left) {
-                this.container.x = this.bounds.left;
+            this.x -= this.instance.speed / delta;
+            if (this.x < this.bounds.left) {
+                this.x = this.bounds.left;
             }
         } else {
             this.movementSpeed = 0
         }
         if (InputHandler.keyboardInput.right.isDown || (InputHandler.gamepadReady ? InputHandler.joyPadInput.right.isDown : null)) {
-            this.container.x += this.instance.speed / delta;
-            if (this.container.x > this.bounds.right) {
-                this.container.x = this.bounds.right;
+            this.x += this.instance.speed / delta;
+            if (this.x > this.bounds.right) {
+                this.x = this.bounds.right;
             }
         } else {
             this.movementSpeed = 0
         }
         if (InputHandler.keyboardInput.up.isDown || (InputHandler.gamepadReady ? InputHandler.joyPadInput.up.isDown : null)) {
-            this.container.y -= this.instance.speed / delta;
-            if (this.container.y < this.bounds.top) {
-                this.container.y = this.bounds.top;
+            this.y -= this.instance.speed / delta;
+            if (this.y < this.bounds.top) {
+                this.y = this.bounds.top;
             }
         } else {
             this.movementSpeed = 0
         }
         if (InputHandler.keyboardInput.down.isDown || (InputHandler.gamepadReady ? InputHandler.joyPadInput.down.isDown : null)) {
-            this.container.y += this.instance.speed / delta;
-            if (this.container.y > this.bounds.bottom) {
-                this.container.y = this.bounds.bottom;
+            this.y += this.instance.speed / delta;
+            if (this.y > this.bounds.bottom) {
+                this.y = this.bounds.bottom;
             }
         } else {
             this.movementSpeed = 0

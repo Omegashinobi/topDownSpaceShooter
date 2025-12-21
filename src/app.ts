@@ -13,7 +13,7 @@ export const MIN_SIZE_WIDTH_SCREEN = window.innerWidth;
 export const MIN_SIZE_HEIGHT_SCREEN = window.innerHeight;
 export const SIZE_WIDTH_SCREEN = 640;
 export const SIZE_HEIGHT_SCREEN = 640;
-export const DEBUG = true;
+export const DEBUG = false;
 
 let parentContainer = document.getElementsByTagName("body").item(0);
 parentContainer.style.backgroundColor = "black";
@@ -21,14 +21,14 @@ parentContainer.style.backgroundColor = "black";
 const config = {
     type: Phaser.AUTO,
     scene: scenes,
-    scale : {
+    scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
         parent: parentContainer,
         width: SIZE_WIDTH_SCREEN,
         height: SIZE_HEIGHT_SCREEN,
     },
-    backgroundColor:'#181425',
+    backgroundColor: '#181425',
     physics: {
         default: 'arcade',
         arcade: {
@@ -37,7 +37,7 @@ const config = {
         }
     },
     input: {
-        gamepad : true
+        gamepad: true
     },
     pixelArt: true
 }

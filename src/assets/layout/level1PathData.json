@@ -1,0 +1,22 @@
+{
+    "scout1_1": [
+        {
+            "x": 0,
+            "y": 0,
+            "duration": 2000,
+            "event": "ENABLE_FIRE"
+        },
+        {
+            "x": 0,
+            "y": 0,
+            "duration": 2000,
+            "event": "HOLD_FIRE"
+        },
+        {
+            "x": 0,
+            "y": 0,
+            "duration": 2000,
+            "event": "DEACTIVE"
+        }
+    ]
+}

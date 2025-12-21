@@ -70,13 +70,19 @@ export default class BaseScene extends Phaser.Scene {
 
     public background: Phaser.GameObjects.TileSprite[] = [];
     public player: Mob;
-    public setReady : ()=>void;
-    public ready: Promise<void> = new Promise((resolve) => this.setReady = resolve);
+
+
+    public setPreloadComplete: () => void;
+    public preloadComplete: Promise<void> = new Promise((resolve) => this.setPreloadComplete = resolve);
+
+    public setCreateComplete: () => void;
+    public createComplete: Promise<void> = new Promise((resolve) => this.setCreateComplete = resolve);
+
     public bitmapFonts: string[] = [];
     public enemyTracker: EnemyTracker;
 
-    public levelName : string;
-    
+    public levelName: string;
+
     constructor() {
         super();
     }
@@ -84,12 +90,12 @@ export default class BaseScene extends Phaser.Scene {
     public async preload(): Promise<void> {
         await load(this).then(() => {
             this.enemyTracker = new EnemyTracker();
-            this.setReady()
+            this.setPreloadComplete()
         });
     }
 
     public async create(): Promise<void> {
-        await this.ready;
+        await this.preloadComplete;
         this.background[0] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_1");
         this.background[1] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_2");
         this.background[2] = this.add.tileSprite(0, 0, 0, 0, "tilesprite_stars_3");
@@ -104,17 +110,19 @@ export default class BaseScene extends Phaser.Scene {
 
         this.enemyTracker.create(this)
         this.physics.world.enable(this.mobs.map((e: Mob) => e.container), 0);
-        
+
         this.UIcontainer.create();
         this.UI.forEach((e) => {
             e.create(this.UIcontainer);
         });
 
         this.player = this.findGameObjectWithTag("player");
+
+        this.setCreateComplete();
     }
 
     public async update(time: number, delta: number): Promise<void> {
-        await this.ready;
+        await this.createComplete;
 
         this.mobs.forEach((e) => {
             e.update(time, delta);

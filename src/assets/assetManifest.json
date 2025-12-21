@@ -43,7 +43,7 @@
         "stars_3.png"
     ],
     "layout" : [
-        "enemy_level1_0-45.json"
+        "level1Enemies.json"
     ],
     "enemyGroups": [
         "enemy_level1_0-45_group_a.json",

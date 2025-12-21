@@ -10,11 +10,22 @@ export default class Enemy extends Mob {
     public canFire: boolean = false;
     public trackerActive: number;
     public player: Mob;
-    public spawnProtect = 2000;
+    public spawnProtect: number = 2000;
+    public ambientMoveSpeed: number = 3;
+    public useAmbientMoveSpeed: boolean = true;
 
     public override set active(value: boolean) {
         this.sprite.setVisible(value);
+        this.actionsPlaying = true;
         this._active = true;
+    }
+
+    private set actionsPlaying(val: boolean) {
+        if (val === true && this._actionsPlaying === false) {
+            this.actions.play();
+        }
+
+        this._actionsPlaying = val;
     }
 
     collisionList: string[];
@@ -38,6 +49,14 @@ export default class Enemy extends Mob {
 
     public update(time: number, delta: number): void {
         super.update(time, delta);
+        if (this.useAmbientMoveSpeed) {
+            this.y += this.ambientMoveSpeed / delta;
+        }
+
+        if (this.y > (0 - this.container.height / 2)) {
+            this.active = true;
+        }
+
         if (this._active) {
             this.spawnProtect -= delta;
 
@@ -50,16 +69,11 @@ export default class Enemy extends Mob {
                 this.fireRate -= delta;
                 this.fire();
             }
-
-            if (!this.actionsPlaying) {
-                this.actions.play();
-                this.actionsPlaying = true;
-            }
         }
     }
 
     public setUpActions(actions: any) {
-        const parsed = actions.map((e : any) => {
+        const parsed = actions.map((e: any) => {
             e.tween.targets = e.tween.targets === "self" ? this.container : e.tween.targets;
             return e;
         });
@@ -95,7 +109,7 @@ export default class Enemy extends Mob {
         this.actions.on('ENABLE_FIRE', () => {
             this.canFire = true;
         })
-        this.actions.on('DEACTIVE',()=>{
+        this.actions.on('DEACTIVE', () => {
             this._active = false;
             this.canFire = false;
             this.destroy();

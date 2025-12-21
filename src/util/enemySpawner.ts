@@ -1,14 +1,16 @@
 import BeamEnemy from "../components/enemy/beamEnemy";
 import Enemy from "../components/enemy/enemy";
 import Turret from "../components/enemy/turret";
-import { IMob, TMobType, Position, ISwarmerData, MobPathData } from "../components/mob/data/mob";
+import { IMob, TMobType, Position, ISwarmerData, MobPathData, IEnemyMapData } from "../components/mob/data/mob";
 import Mob from "../components/mob/mob";
 import * as assetManifest from "../assets/assetManifest.json";
 import BaseScene from "../scene/base/base";
 
 import { IManifest } from "../data/manifest";
+import { Math } from "phaser";
 
 let manifest: IManifest = assetManifest;
+let levelData: IEnemyMapData;
 
 interface IextendedIMobOptions {
     spawnFlag: number,
@@ -29,11 +31,14 @@ function enemySpawner(enemyType: string, options: IMob): Enemy {
     return mob;
 }
 
+export function setupEnemyLevelData(data: IEnemyMapData) {
+    levelData = data;
+}
+
 export function setupEnemyData(
     scene: BaseScene,
     enemies: Phaser.Types.Tilemaps.TiledObject[],
     paths: Phaser.Types.Tilemaps.TiledObject[],
-    groupDataPosition: number,
 ): Promise<Enemy[]> {
     return new Promise((resolve, reject) => {
         const enemyData: Enemy[] = [];
@@ -46,9 +51,8 @@ export function setupEnemyData(
                         return el.value;
                     })
                 const linkedPath = paths.find((e) => e.id === pathDataRef);
-                const polyLineData = linkedPath.polyline.map((e) => { return { x: e.x, y: e.y } });
-                const actions: Phaser.Types.Time.TimelineEventConfig[] = setupPathData(e, polyLineData, pathData);
-                const mob = spawn(baseClass.value, e, actions, groupDataPosition, scene);
+                const actions: Phaser.Types.Time.TimelineEventConfig[] = setupPathData(e, linkedPath, pathData);
+                const mob = spawn(baseClass.value, e, actions, scene);
 
                 mob.setUpActions(actions);
 
@@ -63,18 +67,19 @@ export function setupEnemyData(
     });
 }
 
-function setupPathData(baseClass: Phaser.Types.Tilemaps.TiledObject, pathArray: Position[], pathData: MobPathData[]): Phaser.Types.Time.TimelineEventConfig[] {
+function setupPathData(baseClass: Phaser.Types.Tilemaps.TiledObject, linkedPath: Phaser.Types.Tilemaps.TiledObject, pathData: MobPathData[]): Phaser.Types.Time.TimelineEventConfig[] {
+    const polyLineData = linkedPath.polyline.map((e) => { return { x: e.x, y: e.y } });
     let actionData: Phaser.Types.Time.TimelineEventConfig[] = [];
-    pathArray.forEach((e, i, a) => {
+    polyLineData.forEach((e, i, a) => {
         if (pathData[i] === undefined) {
             console.error(`Missing Path ${i} data for Path Array ${i}`);
         } else {
             actionData.push({
-                at: pathData[i].at + Math.abs((baseClass.y / 64) * 1000),
+                at: pathData[i].at,
                 tween: {
                     targets: pathData[i].target || "self",
-                    x: (a[i + 1] !== undefined ? a[i + 1].x : e.x) + Math.abs(baseClass.x),
-                    y: (a[i + 1] !== undefined ? a[i + 1].y : e.y) + Math.abs(baseClass.y),
+                    x: (linkedPath.x + e.x),
+                    y: (linkedPath.y + e.y),
                     duration: pathData[i].duration,
                     ease: pathData[i].ease,
                 },
@@ -95,11 +100,9 @@ function generateHitData(texture: string): number[] {
 function spawn(baseClass: IMob & IextendedIMobOptions,
     e: Phaser.Types.Tilemaps.TiledObject,
     actions: Phaser.Types.Time.TimelineEventConfig[],
-    trackerPos: number,
     scene: BaseScene,
 ) {
     const hitArea = generateHitData(baseClass.texture);
-    const timer = calculateTrackPosition(trackerPos);
 
     return enemySpawner(baseClass.type.toLowerCase(), {
         type: e.type.toLowerCase() as TMobType,
@@ -109,11 +112,10 @@ function spawn(baseClass: IMob & IextendedIMobOptions,
         speed: baseClass.speed,
         scene: scene,
         x: e.x,
-        y: e.y,
+        y: -(levelData.levelHeight - e.y),
         health: baseClass.health,
         hitArea: new Phaser.Geom.Rectangle(hitArea[0], hitArea[1], hitArea[2], hitArea[3]),
         enemyOptions: {
-            tracker: timer / 100,
             actions: actions
         },
     });

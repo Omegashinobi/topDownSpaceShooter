@@ -26,6 +26,7 @@ export default class Mob {
     public canDamage: boolean = true;
     protected onDeath: any;
     public destoryChildren: boolean = false;
+    private colorMatrix: Phaser.FX.ColorMatrix;
 
     protected childMobs: Mob[];
     protected parentMob: Mob;
@@ -90,6 +91,7 @@ export default class Mob {
         this.sprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, this.instance.texture);
         this.sprite.addToDisplayList();
         this.sprite.visible = this._active;
+        this.colorMatrix = this.sprite.preFX.addColorMatrix();
 
         this.scene.anims.createFromAseprite(this.instance.texture, undefined, this.sprite);
 
@@ -197,7 +199,6 @@ export default class Mob {
     destroy() {
         this.scene.destroyMob(this);
         if (this.score && this.instance.health === 0) {
-            this.showDamageAnimation();
             this.scene.score += this.score;
             this.scene.combo++;
         }
@@ -214,13 +215,13 @@ export default class Mob {
     }
 
     showDamageAnimation(): void {
-        this.sprite.setTint(0xff0000);
+        this.colorMatrix.contrast(255);
 
         this.scene.tweens.add({
             targets: this.sprite,
-            duration: 2000,
+            duration: 500,
             onComplete: () => {
-                this.sprite.setTint(0xffffff);
+                this.colorMatrix.contrast(0);
             }
         }).play();
     }
